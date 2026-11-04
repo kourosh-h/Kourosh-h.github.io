@@ -2,16 +2,16 @@
 // They are toy models in 2D that show the mechanism, not the published numbers.
 
 // ---------------------------------------------------------------- Publication I
-// Di-block copolymers A_k B_l (k + l = 7) in water settle on a hydrophilic substrate.
+// Di-block copolymers A_k B_l (k + l = 7) start as a mixed layer on a hydrophilic substrate, under water, and sort themselves.
 // Bead types and repulsions follow the DPD model of the paper: A starch-like, B hydrophobic, C substrate, D water.
+// The bonds are shorter and stiffer than in the paper, so each chain keeps its length and the beads can be drawn touching.
 DEMOS["rs-film"] = {
   title: "How the block ratio shapes the film",
-  text: "The bead model from the paper in a small 2D box. Copolymers of seven beads, with k hydrophilic beads (blue) and 7 &minus; k hydrophobic beads (orange), adsorb from water onto a hydrophilic substrate. The hydrophilic blocks cover the substrate and the hydrophobic blocks gather above them, so a layered film starts to form. Each bead is drawn as wide as a bond is long, so bonded beads touch. The box is much smaller and the run much shorter than in the published 3D simulations, so the figure shows the process rather than the final structures. The top of the box acts like more water, so nothing sticks there.",
-  details: "2D DPD with the bulk repulsions from the paper, a<sub>AB</sub> = 56.15, a<sub>BD</sub> = 107, a<sub>AD</sub> = a<sub>CD</sub> = 35, and 25 for all other pairs. The substrate is made more selective than in the paper, a<sub>AC</sub> = 5 and a<sub>BC</sub> = 107, so the film forms within a short run, with K<sub>b</sub> = 80, r<sub>0</sub> = 1, &rho; = 3, and dt = 0.04. The plot on the right shows the bead density against the distance from the substrate, with A in blue and B in orange",
+  text: "The bead types and repulsions from the paper in a small 2D box. Copolymers of seven beads, with k hydrophilic beads (blue) and 7 &minus; k hydrophobic beads (orange), start as a mixed layer that has just settled from water onto a hydrophilic substrate, and the layer then sorts itself. With k = 4, it gets a hydrophilic layer on the substrate, a hydrophobic middle layer, and a hydrophilic top layer, as in the paper. With k = 6, the hydrophobic beads stay mixed in. The box is much smaller and the run much shorter than in the published 3D simulations, so the figure shows the trend rather than the published structures. The top of the box acts like more water, so nothing sticks there.",
+  details: "2D DPD with the repulsions from the paper, a<sub>AB</sub> = a<sub>BC</sub> = 56.15, a<sub>BD</sub> = 107, a<sub>AD</sub> = a<sub>CD</sub> = 35, and 25 for all other pairs, &rho; = 3, and dt = 0.03. The bonds are shorter and stiffer than in the paper (K<sub>b</sub> = 400 and r<sub>0</sub> = 0.5 instead of 80 and 1), so every chain keeps its length and bonded beads just touch. The plot on the right shows the bead density against the distance from the substrate, with A in blue and B in orange",
   make() {
-    const LX = 10, LY = 14, H0 = 1.2, dt = 0.04, bins = 22, half = LY - H0;
-    // the substrate (C) attracts the hydrophilic A beads and repels the hydrophobic B beads as strongly as water does
-    const A = [[25, 56.15, 5, 35], [56.15, 25, 107, 107], [5, 107, 25, 35], [35, 107, 35, 25]];
+    const LX = 10, LY = 14, H0 = 1.2, dt = 0.03, KB = 400, R0 = 0.5, bins = 22, half = LY - H0;
+    const A = [[25, 56.15, 25, 35], [56.15, 25, 56.15, 107], [25, 56.15, 25, 35], [35, 107, 35, 25]];
     const p = { k: 4, frac: 34 };
     let sim, nPoly, nSub, hA, hB;
     // the top of the box pushes every bead the way water would, so it attracts nothing
@@ -31,20 +31,23 @@ DEMOS["rs-film"] = {
       reset() {
         const fluid = Math.round(3 * LX * (LY - H0)), chains = Math.round(fluid * p.frac / 100 / 7);
         nSub = Math.round(3.5 * LX * H0); nPoly = chains * 7;
-        const n = fluid + nSub;
+        // the chains start as a mixed layer that has just settled on the substrate, with water above it
+        const layer = Math.max(1.5, nPoly / (3 * LX)), n = fluid + nSub;
         const x = new Float64Array(n), y = new Float64Array(n), type = new Uint8Array(n), frozen = new Uint8Array(n), bonds = [];
         let i = 0;
         for (let c = 0; c < chains; c++) {
-          let cx = rand() * LX, cy = H0 + 1 + rand() * 0.6 * (LY - H0 - 2);
+          let cx = rand() * LX, cy = H0 + 0.3 + rand() * (layer - 0.6);
           for (let b = 0; b < 7; b++, i++) {
-            cx = (cx + 0.5 * gauss() + LX) % LX; cy = Math.min(LY - 0.3, Math.max(H0 + 0.3, cy + 0.5 * gauss()));
+            // each chain starts as a random walk with steps of one bond length
+            const angle = 2 * Math.PI * rand();
+            if (b) { cx = (cx + R0 * Math.cos(angle) + LX) % LX; cy = Math.min(H0 + layer - 0.3, Math.max(H0 + 0.3, cy + R0 * Math.sin(angle))); }
             x[i] = cx; y[i] = cy; type[i] = b < p.k ? 0 : 1;
             if (b) bonds.push(i - 1, i);
           }
         }
-        for (; i < fluid; i++) { x[i] = rand() * LX; y[i] = H0 + rand() * (LY - H0); type[i] = 3; }
+        for (; i < fluid; i++) { x[i] = rand() * LX; y[i] = H0 + layer + rand() * (LY - H0 - layer); type[i] = 3; }
         for (let s = 0; s < nSub; s++, i++) { x[i] = rand() * LX; y[i] = rand() * H0; type[i] = 2; frozen[i] = 1; }
-        sim = new DPD2D({ LX, LY, periodicY: false, ylo: H0, yhi: LY, aij: A, dt, kb: 80, r0: 1, extra: topWall });
+        sim = new DPD2D({ LX, LY, periodicY: false, ylo: H0, yhi: LY, aij: A, dt, kb: KB, r0: R0, extra: topWall });
         sim.load(x, y, type, frozen, bonds);
         hA = new Float64Array(bins); hB = new Float64Array(bins);
       },
@@ -73,8 +76,18 @@ DEMOS["rs-film"] = {
         ctx.fillStyle = col.muted; ctx.globalAlpha = 0.28;
         for (let i = nPoly; i < sim.n - nSub; i++) dot(ctx, X(sim.x[i]), Y(sim.y[i]), Math.max(1, s * 0.08));
         ctx.globalAlpha = 1;
-        // beads as wide as the bond length r0 = 1, so bonded beads touch and no bond lines are needed
-        for (let i = 0; i < nPoly; i++) { ctx.fillStyle = sim.type[i] ? col.b : col.a; bead(ctx, X(sim.x[i]), Y(sim.y[i]), s * 0.5, col); }
+        // the bead diameter is the bond length, so bonded beads touch and no bond lines are needed.
+        // The box is periodic in x, so a bead on one edge also shows on the other.
+        const r = 0.5 * R0 * s;
+        ctx.save(); ctx.beginPath(); ctx.rect(0, 0, LX * s, h); ctx.clip();
+        for (let i = 0; i < nPoly; i++) {
+          const px = X(sim.x[i]), py = Y(sim.y[i]);
+          ctx.fillStyle = sim.type[i] ? col.b : col.a;
+          dot(ctx, px, py, r);
+          if (sim.x[i] < 0.5 * R0) dot(ctx, px + LX * s, py, r);
+          else if (sim.x[i] > LX - 0.5 * R0) dot(ctx, px - LX * s, py, r);
+        }
+        ctx.restore();
         let sa = 0, sb = 0, top = 0;
         for (let b = 0; b < bins; b++) { sa += hA[b]; sb += hB[b]; }
         const pa = [], pb = [];

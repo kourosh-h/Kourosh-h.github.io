@@ -1,104 +1,93 @@
-// Block copolymer coating forming on a substrate as the solvent dries
+// Block copolymer coating forming on a substrate as the water dries
 DEMOS.coating = {
   title: "A coating that assembles itself",
-  text: "Di-block copolymers in water above a hydrophilic substrate, simulated with DPD. Water is removed from the top as it evaporates, and the box shrinks with it. The hydrophilic blocks (orange) stick to the substrate, and the hydrophobic blocks (blue) gather above them, so a layered film forms on its own. All chains have eight beads, and each bead is drawn as wide as a bond is long, so bonded beads touch.",
-  details: "18 chains of 8 beads, harmonic bonds k = 80, r<sub>0</sub> = 1, a<sub>AW</sub> = 80, a<sub>AB</sub> = 50, a<sub>BW</sub> = 26, a<sub>SB</sub> = 5, a<sub>SA</sub> = 120, other pairs 25, kT = 1, &rho; = 3",
+  text: "Di-block copolymers in water above a hydrophilic substrate, simulated with DPD. Each chain has a hydrophilic block (blue) and a hydrophobic block (orange). Water leaves from the top as it evaporates, and the box shrinks with it. The hydrophilic blocks stick to the substrate, and the hydrophobic blocks gather above them, so a layered film forms on its own. The bonds are short and stiff, so every chain keeps its length, and bonded beads just touch.",
+  details: "18 chains of 8 beads, bonds K = 400 and r<sub>0</sub> = 0.5, a<sub>PS</sub> = 10, a<sub>WS</sub> = 30, a<sub>HS</sub> = 70, a<sub>HW</sub> = 70, a<sub>PH</sub> = 50, other pairs 25 (P hydrophilic, H hydrophobic, W water, S substrate), kT = 1, &rho; = 3, dt = 0.03",
   make() {
-    const LX = 16, LEN = 8, M = 18, NS = 32, dt = 0.03, gamma = 4.5, sigma = 3, kb = 80, r0 = 1;
-    // types: 0 = A hydrophobic, 1 = B hydrophilic, 2 = water, 3 = substrate
-    // the substrate attracts the hydrophilic B beads and pushes the hydrophobic A beads away
-    const A = [[25, 50, 80, 120], [50, 25, 26, 5], [80, 26, 25, 25], [120, 5, 25, 25]];
-    const p = { rate: 3, nA: 4 };
-    let x, y, vx, vy, fx, fy, type, chainEnd, n, top, t, removed;
-    function forces() {
-      fx.fill(0); fy.fill(0);
-      const noise = sigma / Math.sqrt(dt);
-      for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) {
-        let dx = x[i] - x[j];
-        const dy = y[i] - y[j];
-        dx -= LX * Math.round(dx / LX);
-        if (j === i + 1 && !chainEnd[i]) {
-          // harmonic bond with rest length r0, so all bonds keep nearly the same length
-          const rb = Math.sqrt(dx * dx + dy * dy) || 1e-6, fb = -kb * (rb - r0) / rb;
-          fx[i] += fb * dx; fy[i] += fb * dy; fx[j] -= fb * dx; fy[j] -= fb * dy;
-        }
-        const r2 = dx * dx + dy * dy;
-        if (r2 >= 1 || r2 === 0) continue;
-        const r = Math.sqrt(r2), ex = dx / r, ey = dy / r, w = 1 - r;
-        const dv = ex * (vx[i] - vx[j]) + ey * (vy[i] - vy[j]);
-        const f = A[type[i]][type[j]] * w - gamma * w * w * dv + noise * w * gauss();
-        fx[i] += f * ex; fy[i] += f * ey; fx[j] -= f * ex; fy[j] -= f * ey;
+    const LX = 17, LY = 10, H0 = 1, LEN = 8, M = 18, dt = 0.03, KB = 400, R0 = 0.5;
+    // types: 0 = hydrophilic bead, 1 = hydrophobic bead, 2 = water, 3 = substrate
+    const A = [[25, 50, 25, 10], [50, 25, 70, 70], [25, 70, 25, 30], [10, 70, 30, 25]];
+    const p = { rate: 3, nH: 4 };
+    let sim, nChain, nSub, removed;
+    // the top of the box pushes all beads in the same way, so no block prefers it
+    const topWall = d => {
+      for (let i = 0; i < d.n; i++) {
+        const g = d.yhi - d.y[i];
+        if (g < 1 && !d.frozen[i]) d.fy[i] -= 25 * (1 - Math.max(g, 0));
       }
-      // the top of the box is neutral: it pushes every bead like water would, so no block prefers it
-      for (let i = 0; i < n - NS; i++) {
-        const d = top - y[i];
-        if (d < 1) fy[i] -= 1.5 * A[type[i]][2] * (1 - Math.max(d, 0));
-      }
-    }
+    };
     return {
-      perFrame: 2,
+      perFrame: 6,
       params: [
         { key: "rate", label: "evaporation", min: 0, max: 10, step: 1, value: 3 },
-        { key: "nA", label: "hydrophobic beads per chain", min: 1, max: 7, step: 1, value: 4 }
+        { key: "nH", label: "hydrophobic beads per chain", min: 1, max: 7, step: 1, value: 4 }
       ],
-      set(k, v) { p[k] = v; if (k === "nA") this.reset(); },
+      set(key, v) { p[key] = v; if (key === "nH") this.reset(); },
       reset() {
-        top = 10;
-        const nFluid = Math.round(3 * LX * (top - 0.5));
-        n = nFluid + NS;
-        x = new Float64Array(n); y = new Float64Array(n); vx = new Float64Array(n); vy = new Float64Array(n);
-        fx = new Float64Array(n); fy = new Float64Array(n); type = new Uint8Array(n); chainEnd = new Uint8Array(n);
+        nChain = M * LEN; nSub = Math.round(3 * LX * H0);
+        const n = nSub + Math.round(3 * LX * (LY - H0));
+        const x = new Float64Array(n), y = new Float64Array(n), type = new Uint8Array(n), frozen = new Uint8Array(n), bonds = [];
         let i = 0;
+        // chains first, then the substrate, then water, so evaporation can always take beads from the end
         for (let c = 0; c < M; c++) {
-          let cx = rand() * LX, cy = 2 + rand() * (top - 3);
+          let cx = rand() * LX, cy = H0 + 1.5 + rand() * (LY - H0 - 3);
           for (let k = 0; k < LEN; k++, i++) {
-            cx = (cx + 0.4 * gauss() + LX) % LX; cy = Math.min(top - 0.3, Math.max(0.8, cy + 0.4 * gauss()));
-            x[i] = cx; y[i] = cy; type[i] = k < p.nA ? 0 : 1; chainEnd[i] = k === LEN - 1 ? 1 : 0;
+            // each chain starts as a random walk with steps of one bond length
+            const angle = 2 * Math.PI * rand();
+            if (k) { cx = (cx + R0 * Math.cos(angle) + LX) % LX; cy = Math.min(LY - 0.2, Math.max(H0 + 0.2, cy + R0 * Math.sin(angle))); }
+            x[i] = cx; y[i] = cy; type[i] = k < p.nH ? 1 : 0;
+            if (k) bonds.push(i - 1, i);
           }
         }
-        for (; i < nFluid; i++) { x[i] = rand() * LX; y[i] = 0.6 + rand() * (top - 0.9); type[i] = 2; chainEnd[i] = 1; }
-        for (let k = 0; k < NS; k++, i++) { x[i] = (k + 0.5) * LX / NS; y[i] = 0.25; type[i] = 3; chainEnd[i] = 1; }
-        for (let k = 0; k < nFluid; k++) { vx[k] = gauss(); vy[k] = gauss(); }
-        t = 0; removed = 0; forces();
+        for (let k = 0; k < nSub; k++, i++) { x[i] = rand() * LX; y[i] = rand() * H0; type[i] = 3; frozen[i] = 1; }
+        for (; i < n; i++) { x[i] = rand() * LX; y[i] = H0 + rand() * (LY - H0); type[i] = 2; }
+        sim = new DPD2D({ LX, LY, periodicY: false, ylo: H0, yhi: LY, aij: A, dt, kb: KB, r0: R0, extra: topWall });
+        sim.load(x, y, type, frozen, bonds);
+        removed = 0;
       },
       step() {
-        const nFluid = n - NS;
-        for (let i = 0; i < nFluid; i++) {
-          vx[i] += 0.5 * dt * fx[i]; vy[i] += 0.5 * dt * fy[i];
-          x[i] = (x[i] + dt * vx[i] + LX) % LX; y[i] += dt * vy[i];
-          if (y[i] < 0.5) { y[i] = 1 - y[i]; vy[i] = Math.abs(vy[i]); }
-          if (y[i] > top) { y[i] = 2 * top - y[i]; vy[i] = -Math.abs(vy[i]); }
-        }
-        forces();
-        for (let i = 0; i < nFluid; i++) { vx[i] += 0.5 * dt * fx[i]; vy[i] += 0.5 * dt * fy[i]; }
-        t += dt;
-        // evaporation: take the highest water bead out now and then
-        if (p.rate && Math.round(t / dt) % Math.round(40 / p.rate) === 0) {
-          let best = -1;
-          for (let i = 0; i < n - NS; i++) if (type[i] === 2 && y[i] > top - 1.5 && (best < 0 || y[i] > y[best])) best = i;
-          if (best >= 0) {
-            const last = n - NS - 1;
-            for (const arr of [x, y, vx, vy, fx, fy]) { arr[best] = arr[last]; }
-            type[best] = type[last]; chainEnd[best] = chainEnd[last];
-            for (let k = last; k < n - 1; k++) { for (const arr of [x, y, vx, vy, fx, fy]) arr[k] = arr[k + 1]; type[k] = type[k + 1]; chainEnd[k] = chainEnd[k + 1]; }
-            n--; removed++;
-            top = Math.max(2.2, 0.5 + (n - NS) / (3 * LX));
-          }
-        }
+        sim.step();
+        // evaporation: now and then the highest water bead leaves, and the top comes down so the density stays at 3
+        if (!p.rate || Math.round(sim.t / dt) % Math.round(150 / p.rate)) return;
+        let best = -1;
+        for (let i = nChain + nSub; i < sim.n; i++) if (best < 0 || sim.y[i] > sim.y[best]) best = i;
+        if (best < 0) return;
+        const last = sim.n - 1;
+        for (const arr of [sim.x, sim.y, sim.vx, sim.vy, sim.fx, sim.fy]) arr[best] = arr[last];
+        sim.n--; removed++;
+        sim.yhi = H0 + (sim.n - nSub) / (3 * LX);
       },
       draw(ctx, w, h, col) {
-        const s = Math.min(w / LX, h / 10.6), ox = (w - LX * s) / 2, base = h - 10;
+        const s = Math.min(w / LX, h / LY), ox = (w - LX * s) / 2, base = (h + LY * s) / 2, r = 0.5 * R0 * s;
         const X = v => ox + v * s, Y = v => base - v * s;
-        ctx.fillStyle = col.ink; ctx.fillRect(0, base - 0.1 * s, w, h);
+        ctx.save();
+        ctx.beginPath(); ctx.rect(ox, 0, LX * s, h); ctx.clip();
+        ctx.fillStyle = col.ink; ctx.fillRect(ox, Y(H0), LX * s, H0 * s);
+        ctx.fillStyle = col.paper; ctx.font = "10px monospace"; ctx.fillText("hydrophilic substrate", ox + 4, Y(0) - 4);
         ctx.strokeStyle = col.rule; ctx.setLineDash([4, 4]);
-        ctx.beginPath(); ctx.moveTo(0, Y(top)); ctx.lineTo(w, Y(top)); ctx.stroke(); ctx.setLineDash([]);
-        for (let i = 0; i < n - NS; i++) if (type[i] === 2) { ctx.fillStyle = col.rule; dot(ctx, X(x[i]), Y(y[i]), s * 0.12); }
-        // beads as wide as the bond length r0, so bonded beads touch and no bond lines are needed
-        for (let i = 0; i < n - NS; i++) if (type[i] < 2) { ctx.fillStyle = type[i] ? col.b : col.a; bead(ctx, X(x[i]), Y(y[i]), s * 0.5 * r0, col); }
+        ctx.beginPath(); ctx.moveTo(ox, Y(sim.yhi)); ctx.lineTo(ox + LX * s, Y(sim.yhi)); ctx.stroke(); ctx.setLineDash([]);
+        ctx.fillStyle = col.rule;
+        for (let i = nChain + nSub; i < sim.n; i++) dot(ctx, X(sim.x[i]), Y(sim.y[i]), Math.max(1, s * 0.09));
+        // the bead diameter is the bond length, so bonded beads touch and no bond lines are needed
+        for (let i = 0; i < nChain; i++) {
+          const px = X(sim.x[i]), py = Y(sim.y[i]);
+          ctx.fillStyle = sim.type[i] ? col.b : col.a;
+          dot(ctx, px, py, r);
+          // the box is periodic in x, so a bead on one edge also shows on the other
+          if (sim.x[i] < 0.5 * R0) dot(ctx, px + LX * s, py, r);
+          else if (sim.x[i] > LX - 0.5 * R0) dot(ctx, px - LX * s, py, r);
+        }
+        ctx.restore();
+      },
+      // share of the chain beads next to the substrate that are hydrophilic
+      contact() {
+        let philic = 0, all = 0;
+        for (let i = 0; i < nChain; i++) if (sim.y[i] < H0 + 0.7) { all++; if (!sim.type[i]) philic++; }
+        return all ? philic / all : NaN;
       },
       info() {
-        const water = (n - NS) - M * LEN;
-        return `water beads left = ${water}   evaporated = ${removed}`;
+        const c = this.contact(), water = sim.n - nChain - nSub;
+        return `water left ${water}   next to the substrate: ${isFinite(c) ? (100 * c).toFixed(0) + "% hydrophilic" : "no chains yet"}`;
       }
     };
   }
