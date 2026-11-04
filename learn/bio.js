@@ -137,7 +137,7 @@ DEMOS["bio-melt"] = {
 DEMOS["bio-bilayer"] = {
   title: "Lipids assembling into a membrane",
   text: "Lipid-like molecules in DPD water, each with one water-loving head bead and two oily tail beads. The tails hide from the water, and the molecules gather into bilayer sheets and micelles.",
-  details: "2D DPD, box 15 &times; 8.75, 380 beads (water drawn faint), &rho; &asymp; 2.9, a = 25 between like beads, a<sub>HT</sub> = 50, a<sub>TW</sub> set by the slider, bonds k = 100, r<sub>0</sub> = 0.45, kT = 1, dt = 0.03",
+  details: "2D DPD, box 15 &times; 8.75, 380 beads (water drawn faint), &rho; &asymp; 2.9, a = 25 between like beads, a<sub>HT</sub> = 50, a<sub>TW</sub> set by the slider, bonds k = 400, r<sub>0</sub> = 0.45 (beads drawn as wide as a bond), kT = 1, dt = 0.03",
   make() {
     const LX = 15, LY = 8.75, NT = 380, dt = 0.03, gamma = 4.5, noise = 3 / Math.sqrt(dt);
     const p = { aTW: 75, lip: 50 };
@@ -159,7 +159,7 @@ DEMOS["bio-bilayer"] = {
         const i = 3 * m + k, j = i + 1;
         let dx = x[i] - x[j], dy = y[i] - y[j];
         dx -= LX * Math.round(dx / LX); dy -= LY * Math.round(dy / LY);
-        const r = Math.hypot(dx, dy) || 1e-6, f = -100 * (r - 0.45);
+        const r = Math.hypot(dx, dy) || 1e-6, f = -400 * (r - 0.45);
         fx[i] += f * dx / r; fy[i] += f * dy / r; fx[j] -= f * dx / r; fy[j] -= f * dy / r;
       }
     };
@@ -196,14 +196,8 @@ DEMOS["bio-bilayer"] = {
         ctx.fillStyle = col.muted; ctx.globalAlpha = 0.25;
         for (let i = 3 * nl; i < NT; i++) dot(ctx, x[i] * s, y[i] * s, s * 0.12);
         ctx.globalAlpha = 1;
-        ctx.strokeStyle = col.ink; ctx.lineWidth = Math.max(2.5, s * 0.12); ctx.lineCap = "round";
-        for (let m = 0; m < nl; m++) for (let k = 0; k < 2; k++) {
-          const i = 3 * m + k, j = i + 1;
-          if (Math.abs(x[i] - x[j]) > LX / 2 || Math.abs(y[i] - y[j]) > LY / 2) continue;
-          ctx.beginPath(); ctx.moveTo(x[i] * s, y[i] * s); ctx.lineTo(x[j] * s, y[j] * s); ctx.stroke();
-        }
-        ctx.lineCap = "butt";
-        for (let i = 0; i < 3 * nl; i++) { ctx.fillStyle = type[i] === 1 ? col.a : col.b; dot(ctx, x[i] * s, y[i] * s, s * (type[i] === 1 ? 0.3 : 0.24)); }
+        // lipid beads as wide as the bond length 0.45, so bonded beads touch
+        for (let i = 0; i < 3 * nl; i++) { ctx.fillStyle = type[i] === 1 ? col.a : col.b; dot(ctx, x[i] * s, y[i] * s, s * 0.225); }
       },
       info() {
         // fraction of tail beads with no water bead inside r = 1

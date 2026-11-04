@@ -186,17 +186,16 @@ DEMOS["ind-perm"] = {
         ctx.fillStyle = col.b; ctx.globalAlpha = 0.25; ctx.fillRect(ox + bw - 4, oy, 4, bh); ctx.globalAlpha = 1;
         ctx.fillStyle = col.muted; ctx.font = "10px monospace";
         ctx.fillText("fixed dose", ox + 4, oy - 6); ctx.textAlign = "right"; ctx.fillText("removed", ox + bw - 4, oy - 6); ctx.textAlign = "left";
-        // lipids: tails as bonded pairs of lines, heads as dots
-        const nl = Math.round(H / 0.5);
+        // lipids: a head bead and a tail of touching beads on each side, each bead as wide as a bond
+        const nl = Math.round(H / 0.5), d = 0.34;
         for (let k = 0; k < nl; k++) {
           const yy = Y((k + 0.5) * H / nl);
-          ctx.strokeStyle = col.muted; ctx.globalAlpha = 0.5; ctx.lineWidth = 1.2;
           for (const sgn of [-1, 1]) {
-            ctx.beginPath(); ctx.moveTo(X(sgn * 1.8), yy - 2); ctx.lineTo(X(sgn * 0.15), yy - 2);
-            ctx.moveTo(X(sgn * 1.8), yy + 2); ctx.lineTo(X(sgn * 0.15), yy + 2); ctx.stroke();
+            ctx.fillStyle = col.muted; ctx.globalAlpha = 0.5;
+            for (let b = 1; b <= 5; b++) dot(ctx, X(sgn * (2 - b * d)), yy, s * d / 2);
+            ctx.globalAlpha = 1; ctx.fillStyle = col.a;
+            dot(ctx, X(sgn * 2), yy, s * d / 2);
           }
-          ctx.globalAlpha = 1; ctx.fillStyle = col.a;
-          dot(ctx, X(-2), yy, s * 0.17); dot(ctx, X(2), yy, s * 0.17);
         }
         ctx.fillStyle = col.b;
         for (let i = 0; i < NMAX; i++) if (on[i]) dot(ctx, X(x[i]), Y(y[i]), Math.max(2.5, s * 0.12));

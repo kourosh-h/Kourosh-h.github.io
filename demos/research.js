@@ -184,13 +184,13 @@ DEMOS["rs-ratio"] = {
       curved: "curved aggregates, the substrate is not fully covered",
       lamellar: "lamellar coating, hydrophobic layer continuous"
     };
-    // the chain, head (A) on top, as a zigzag of beads
+    // the chain, head (A) on top, as a zigzag of beads; each bead is as wide as the bond, so bonded beads touch
     const chain = (ctx, cx, top, step, i, col) => {
-      const pts = [];
-      for (let k = 0; k < 7; k++) pts.push([cx + (k % 2 ? 7 : -7) + 1.5 * Math.sin(phase + k), top + k * step]);
-      ctx.strokeStyle = col.ink; ctx.lineWidth = 3; ctx.beginPath();
-      pts.forEach(([a, b], k) => k ? ctx.lineTo(a, b) : ctx.moveTo(a, b)); ctx.stroke();
-      pts.forEach(([a, b], k) => { ctx.fillStyle = k < i ? col.a : col.b; dot(ctx, a, b, 6.5); });
+      const r = 0.5 * Math.hypot(14, step);
+      for (let k = 0; k < 7; k++) {
+        ctx.fillStyle = k < i ? col.a : col.b;
+        dot(ctx, cx + (k % 2 ? 7 : -7) + 1.5 * Math.sin(phase + k), top + k * step, r);
+      }
     };
     // the shape it packs like: width of the head part against width of the tail part
     const shape = (ctx, cx, sy, sh, i, col) => {

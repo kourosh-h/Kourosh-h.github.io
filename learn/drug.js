@@ -145,7 +145,7 @@ DEMOS["dr-release"] = {
 DEMOS["dr-micelle"] = {
   title: "Loading a drug into micelles",
   text: "Head-tail molecules gather into micelles and pick up hydrophobic drug molecules along the way.",
-  details: "40 head-tail amphiphiles (head orange, tail blue, bonds drawn as lines) and 14 drug molecules (green) in implicit water, Brownian dynamics, kT = 1. Soft repulsion between all beads, a cosine attraction of depth &epsilon; between tails and between tails and drug",
+  details: "40 head-tail amphiphiles (head orange, tail blue, drawn touching at the bond length 0.9) and 14 drug molecules (green) in implicit water, Brownian dynamics, kT = 1. Soft repulsion between all beads, a cosine attraction of depth &epsilon; between tails and between tails and drug",
   make() {
     const NA = 40, ND = 14, N = 2 * NA + ND, LX = 22, LY = 22 * 7 / 12, dt = 0.002;
     const p = { eps: 2.5 };
@@ -210,13 +210,6 @@ DEMOS["dr-micelle"] = {
           ctx.fillStyle = col.b; dot(ctx, x[2 * m] * s, y[2 * m] * s, s * 0.5);
           ctx.fillStyle = col.a; dot(ctx, x[2 * m + 1] * s, y[2 * m + 1] * s, s * 0.4);
         }
-        ctx.strokeStyle = col.ink; ctx.lineWidth = Math.max(2, s * 0.14); ctx.beginPath();
-        for (let m = 0; m < NA; m++) {
-          const i = 2 * m, j = i + 1;
-          if (Math.abs(x[i] - x[j]) > LX / 2 || Math.abs(y[i] - y[j]) > LY / 2) continue;
-          ctx.moveTo(x[i] * s, y[i] * s); ctx.lineTo(x[j] * s, y[j] * s);
-        }
-        ctx.stroke();
         ctx.fillStyle = CLUSTER_COLORS[2];
         for (let i = 2 * NA; i < N; i++) dot(ctx, x[i] * s, y[i] * s, s * 0.42);
       },
