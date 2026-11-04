@@ -6,11 +6,12 @@
 // Bead types and repulsions follow the DPD model of the paper: A starch-like, B hydrophobic, C substrate, D water.
 DEMOS["rs-film"] = {
   title: "How the block ratio shapes the film",
-  text: "The bead model from the paper in a small 2D box. Copolymers of seven beads, with k hydrophilic beads (blue) and 7 &minus; k hydrophobic beads (orange), adsorb from water onto a hydrophilic substrate, spread, and start to form layers. The box is much smaller and the run much shorter than in the published 3D simulations, so the figure shows the process rather than the final structures. The top of the box acts like more water, so nothing sticks there.",
-  details: "2D DPD with the repulsions from the paper, a<sub>AB</sub> = a<sub>BC</sub> = 56.15, a<sub>BD</sub> = 107, a<sub>AD</sub> = a<sub>CD</sub> = 35, and 25 for all other pairs, with K<sub>b</sub> = 80, r<sub>0</sub> = 1, &rho; = 3, and dt = 0.04. The plot on the right shows the bead density against the distance from the substrate, with A in blue and B in orange",
+  text: "The bead model from the paper in a small 2D box. Copolymers of seven beads, with k hydrophilic beads (blue) and 7 &minus; k hydrophobic beads (orange), adsorb from water onto a hydrophilic substrate. The hydrophilic blocks cover the substrate and the hydrophobic blocks gather above them, so a layered film starts to form. Each bead is drawn as wide as a bond is long, so bonded beads touch. The box is much smaller and the run much shorter than in the published 3D simulations, so the figure shows the process rather than the final structures. The top of the box acts like more water, so nothing sticks there.",
+  details: "2D DPD with the bulk repulsions from the paper, a<sub>AB</sub> = 56.15, a<sub>BD</sub> = 107, a<sub>AD</sub> = a<sub>CD</sub> = 35, and 25 for all other pairs. The substrate is made more selective than in the paper, a<sub>AC</sub> = 5 and a<sub>BC</sub> = 107, so the film forms within a short run, with K<sub>b</sub> = 80, r<sub>0</sub> = 1, &rho; = 3, and dt = 0.04. The plot on the right shows the bead density against the distance from the substrate, with A in blue and B in orange",
   make() {
     const LX = 10, LY = 14, H0 = 1.2, dt = 0.04, bins = 22, half = LY - H0;
-    const A = [[25, 56.15, 25, 35], [56.15, 25, 56.15, 107], [25, 56.15, 25, 35], [35, 107, 35, 25]];
+    // the substrate (C) attracts the hydrophilic A beads and repels the hydrophobic B beads as strongly as water does
+    const A = [[25, 56.15, 5, 35], [56.15, 25, 107, 107], [5, 107, 25, 35], [35, 107, 35, 25]];
     const p = { k: 4, frac: 34 };
     let sim, nPoly, nSub, hA, hB;
     // the top of the box pushes every bead the way water would, so it attracts nothing
@@ -72,8 +73,8 @@ DEMOS["rs-film"] = {
         ctx.fillStyle = col.muted; ctx.globalAlpha = 0.28;
         for (let i = nPoly; i < sim.n - nSub; i++) dot(ctx, X(sim.x[i]), Y(sim.y[i]), Math.max(1, s * 0.08));
         ctx.globalAlpha = 1;
-        sim.drawBonds(ctx, X, Y, Math.max(2.5, s * 0.16), col.ink);
-        for (let i = 0; i < nPoly; i++) { ctx.fillStyle = sim.type[i] ? col.b : col.a; dot(ctx, X(sim.x[i]), Y(sim.y[i]), s * 0.27); }
+        // beads as wide as the bond length r0 = 1, so bonded beads touch and no bond lines are needed
+        for (let i = 0; i < nPoly; i++) { ctx.fillStyle = sim.type[i] ? col.b : col.a; bead(ctx, X(sim.x[i]), Y(sim.y[i]), s * 0.5, col); }
         let sa = 0, sb = 0, top = 0;
         for (let b = 0; b < bins; b++) { sa += hA[b]; sb += hB[b]; }
         const pa = [], pb = [];

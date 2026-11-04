@@ -1,12 +1,13 @@
 // Block copolymer coating forming on a substrate as the solvent dries
 DEMOS.coating = {
   title: "A coating that assembles itself",
-  text: "Di-block copolymers in water above a hydrophilic substrate, simulated with DPD. Water is removed from the top as it evaporates, and the box shrinks with it. The hydrophilic blocks (orange) stick to the substrate, and the hydrophobic blocks (blue) gather above them, so a layered film forms on its own.",
-  details: "18 chains of 8 beads, bonds k = 4, a<sub>AW</sub> = 80, a<sub>AB</sub> = 50, a<sub>BW</sub> = 26, a<sub>SB</sub> = 15, a<sub>SA</sub> = 60, other pairs 25, kT = 1, &rho; = 3",
+  text: "Di-block copolymers in water above a hydrophilic substrate, simulated with DPD. Water is removed from the top as it evaporates, and the box shrinks with it. The hydrophilic blocks (orange) stick to the substrate, and the hydrophobic blocks (blue) gather above them, so a layered film forms on its own. All chains have eight beads, and each bead is drawn as wide as a bond is long, so bonded beads touch.",
+  details: "18 chains of 8 beads, harmonic bonds k = 80, r<sub>0</sub> = 1, a<sub>AW</sub> = 80, a<sub>AB</sub> = 50, a<sub>BW</sub> = 26, a<sub>SB</sub> = 5, a<sub>SA</sub> = 120, other pairs 25, kT = 1, &rho; = 3",
   make() {
-    const LX = 16, LEN = 8, M = 18, NS = 32, dt = 0.03, gamma = 4.5, sigma = 3, kb = 4;
+    const LX = 16, LEN = 8, M = 18, NS = 32, dt = 0.03, gamma = 4.5, sigma = 3, kb = 80, r0 = 1;
     // types: 0 = A hydrophobic, 1 = B hydrophilic, 2 = water, 3 = substrate
-    const A = [[25, 50, 80, 60], [50, 25, 26, 15], [80, 26, 25, 25], [60, 15, 25, 25]];
+    // the substrate attracts the hydrophilic B beads and pushes the hydrophobic A beads away
+    const A = [[25, 50, 80, 120], [50, 25, 26, 5], [80, 26, 25, 25], [120, 5, 25, 25]];
     const p = { rate: 3, nA: 4 };
     let x, y, vx, vy, fx, fy, type, chainEnd, n, top, t, removed;
     function forces() {
@@ -16,7 +17,11 @@ DEMOS.coating = {
         let dx = x[i] - x[j];
         const dy = y[i] - y[j];
         dx -= LX * Math.round(dx / LX);
-        if (j === i + 1 && !chainEnd[i]) { fx[i] -= kb * dx; fy[i] -= kb * dy; fx[j] += kb * dx; fy[j] += kb * dy; }
+        if (j === i + 1 && !chainEnd[i]) {
+          // harmonic bond with rest length r0, so all bonds keep nearly the same length
+          const rb = Math.sqrt(dx * dx + dy * dy) || 1e-6, fb = -kb * (rb - r0) / rb;
+          fx[i] += fb * dx; fy[i] += fb * dy; fx[j] -= fb * dx; fy[j] -= fb * dy;
+        }
         const r2 = dx * dx + dy * dy;
         if (r2 >= 1 || r2 === 0) continue;
         const r = Math.sqrt(r2), ex = dx / r, ey = dy / r, w = 1 - r;
@@ -88,14 +93,8 @@ DEMOS.coating = {
         ctx.strokeStyle = col.rule; ctx.setLineDash([4, 4]);
         ctx.beginPath(); ctx.moveTo(0, Y(top)); ctx.lineTo(w, Y(top)); ctx.stroke(); ctx.setLineDash([]);
         for (let i = 0; i < n - NS; i++) if (type[i] === 2) { ctx.fillStyle = col.rule; dot(ctx, X(x[i]), Y(y[i]), s * 0.12); }
-        ctx.strokeStyle = col.ink; ctx.lineWidth = Math.max(3, s * 0.16); ctx.lineCap = "round"; ctx.beginPath();
-        for (let i = 0; i < n - NS - 1; i++) {
-          if (chainEnd[i] || type[i] > 1 || type[i + 1] > 1) continue;
-          if (Math.abs(x[i] - x[i + 1]) > LX / 2) continue;
-          ctx.moveTo(X(x[i]), Y(y[i])); ctx.lineTo(X(x[i + 1]), Y(y[i + 1]));
-        }
-        ctx.stroke();
-        for (let i = 0; i < n - NS; i++) if (type[i] < 2) { ctx.fillStyle = type[i] ? col.b : col.a; dot(ctx, X(x[i]), Y(y[i]), s * 0.32); }
+        // beads as wide as the bond length r0, so bonded beads touch and no bond lines are needed
+        for (let i = 0; i < n - NS; i++) if (type[i] < 2) { ctx.fillStyle = type[i] ? col.b : col.a; bead(ctx, X(x[i]), Y(y[i]), s * 0.5 * r0, col); }
       },
       info() {
         const water = (n - NS) - M * LEN;

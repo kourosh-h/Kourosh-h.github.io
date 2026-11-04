@@ -30,6 +30,11 @@ new MutationObserver(setClusterColors).observe(document.documentElement, { attri
 function dot(ctx, x, y, r) {
   ctx.beginPath(); ctx.arc(x, y, r, 0, 2 * Math.PI); ctx.fill();
 }
+// a bead with a thin outline in the background color, so touching beads stay apart
+function bead(ctx, x, y, r, col) {
+  ctx.beginPath(); ctx.arc(x, y, r, 0, 2 * Math.PI); ctx.fill();
+  ctx.strokeStyle = col.paper; ctx.lineWidth = Math.max(1, r * 0.14); ctx.stroke();
+}
 
 // Muller-Brown potential, used by two demos
 const MB = {
