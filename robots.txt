@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kourosh-h.github.io/sitemap.xml
