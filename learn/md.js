@@ -161,12 +161,12 @@ DEMOS["md-cutoff"] = {
 };
 
 DEMOS["md-eom"] = {
-  title: "Six equations of motion, one system",
-  text: "The same liquid, moved by Euler, Verlet, Langevin, Brownian, DPD, and Nos&eacute;-Hoover dynamics, side by side.",
-  details: "36 LJ particles, &rho; = 0.73, the same start (T = 1.6) copied six times. Euler and velocity Verlet are plain Newton (NVE). Langevin, Brownian (overdamped, no velocities), DPD (pairwise friction and noise, r<sub>c</sub> = 1.5) and Nos&eacute;-Hoover hold the target T. Energy plot: change in total energy per particle (for Nos&eacute;-Hoover, including the thermostat's own energy)",
+  title: "Newton and four thermostats, one system",
+  text: "The same liquid, moved by Newton's equations (with Euler and with velocity Verlet steps) and by Langevin, Brownian, DPD, and Nos&eacute;-Hoover dynamics, side by side.",
+  details: "36 LJ particles, &rho; = 0.73, the same start (T = 1.6) copied six times. The first two copies follow Newton's equations (NVE), stepped with Euler and with velocity Verlet. Langevin, Brownian (overdamped, no velocities), DPD (pairwise friction and noise, r<sub>c</sub> = 1.5) and Nos&eacute;-Hoover hold the target T. Energy plot: change in total energy per particle (for Nos&eacute;-Hoover, including the thermostat's own energy)",
   make() {
     const N = 36, L = 7;
-    const names = ["Euler", "velocity Verlet", "Langevin", "Brownian", "DPD", "Nosé-Hoover"];
+    const names = ["Newton, Euler", "Newton, Verlet", "Langevin", "Brownian", "DPD", "Nosé-Hoover"];
     const p = { dt: 0.005, T: 1, gamma: 1 };
     let sys, hist, t;
     const forces = s => {
@@ -288,7 +288,7 @@ DEMOS["md-eom"] = {
       },
       info() {
         const T = m => sys[m].dead ? "-" : (ke(sys[m]) / N).toFixed(2);
-        return `t = ${t.toFixed(1)}   T: Verlet ${T(1)}, Langevin ${T(2)}, DPD ${T(4)}, NH ${T(5)}`;
+        return `t = ${t.toFixed(1)}   T: Newton ${T(1)}, Langevin ${T(2)}, DPD ${T(4)}, NH ${T(5)}`;
       }
     };
   }

@@ -73,16 +73,16 @@
 
 <section class="lesson" id="s5">
   <div>
-    <h2>Equations of motion compared</h2>
-    <p>"Running MD" can mean quite different equations. Here, the same starting configuration is copied six times, and each copy is moved with a different rule.</p>
-<ul><li><b>Euler</b> is the naive update. The energy grows every step until the system blows up.</li>
-<li><b>Velocity Verlet</b> is plain Newtonian dynamics done right. The energy wobbles but does not drift, and the temperature settles wherever energy conservation puts it.</li>
+    <h2>Newton's equations and the thermostats added to them</h2>
+    <p>Plain MD solves Newton's equations of motion, m dv/dt = F. They keep the total energy constant, so the temperature is whatever the energy allows (the NVE ensemble). To hold the temperature at a set value, a thermostat changes the equations. Here, the same starting configuration is copied six times. The first two copies follow Newton's equations with two different time-step rules. The other four add a thermostat, or, in the Brownian case, drop inertia.</p>
+<ul><li><b>Newton with Euler steps</b> uses the naive update. The energy grows every step until the system blows up. The equations are right, but the time-step rule is not.</li>
+<li><b>Newton with velocity Verlet</b> is plain Newtonian dynamics done right. The energy wobbles but does not drift, and the temperature settles wherever energy conservation puts it.</li>
 <li><b>Langevin</b> dynamics adds friction and random kicks on every particle. The temperature is correct, but momentum is not conserved, so hydrodynamic flow is damped.</li>
 <li><b>Brownian</b> dynamics is the overdamped limit, with no velocities at all. It is good for slow colloids and for polymers in implicit solvent, and it is the cheapest.</li>
 <li>In <b>DPD</b>, friction and noise act on pairs, along the line between them, so momentum is conserved and flow behaves properly.</li>
 <li>In <b>Nos&eacute;-Hoover</b> dynamics, one extra variable acts as a friction that turns positive when the system is too hot and negative when it is too cold. The method is deterministic, and the energy, including the thermostat, is conserved.</li></ul>
 <div class="eq">Newton: m dv/dt = F<br>Langevin: m dv/dt = F &minus; &gamma;mv + &radic;(2&gamma;mkT) &xi;(t)<br>Brownian: &gamma; dx/dt = F + &radic;(2&gamma;kT) &xi;(t)<br>Nos&eacute;-Hoover: m dv/dt = F &minus; &zeta;mv,   d&zeta;/dt = (T/T<sub>0</sub> &minus; 1)/&tau;<sup>2</sup></div>
-<p class="try">Try: push dt up and watch Euler fail first, and then everything else. If you change the target T, Verlet ignores it, while the thermostats follow. If you raise &gamma;, the Langevin and Brownian copies slow down, while DPD still flows.</p>
+<p class="try">Try: push dt up and watch Euler fail first, and then everything else. If you change the target T, the two Newton copies ignore it, while the thermostats follow. If you raise &gamma;, the Langevin and Brownian copies slow down, while DPD still flows.</p>
   </div>
   <figure data-demo="md-eom" data-text="off"></figure>
 </section>
