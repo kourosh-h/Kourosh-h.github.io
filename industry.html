@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Industry · Kourosh Hasheminejad</title>
+<meta name="description" content="Molecular and mesoscale simulations for industrial R&amp;D in packaging, coatings, plastics, pharmaceuticals, batteries, semiconductors, carbon capture, home care, and metals, with a model for each that runs in the browser.">
+<meta name="theme-color" content="#d5d8dc" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kourosh Hasheminejad">
+<meta property="og:title" content="Industry · Kourosh Hasheminejad">
+<meta property="og:description" content="Molecular and mesoscale simulations for industrial R&amp;D in packaging, coatings, plastics, pharmaceuticals, batteries, semiconductors, carbon capture, home care, and metals, with a model for each that runs in the browser.">
+<meta property="og:url" content="https://kourosh-h.github.io/industry.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230c0e10'/%3E%3Cpath d='M8 23L16 16L24 9' stroke='%23959ea8' stroke-width='2.4'/%3E%3Ccircle cx='8' cy='23' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='16' cy='16' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='24' cy='9' r='4.8' fill='%23efa458'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Gloock&family=Spline+Sans+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+<header class="nav" id="nav"></header>
+
+<div class="pagehead">
+  <p class="kicker">Industry</p>
+  <h1>Simulations for industry</h1>
+  <p>I build molecular models that help R&amp;D teams decide what to make and what to test. In my doctorate, I worked with Kemira on barrier coatings for paper and board, and the same methods work in many other industries. For each industry below, you will find the questions I can help with, how I would model them, my closest past work, and a small model that you can run in the browser.</p>
+  <a class="cta" data-link="linkedin">Contact me on LinkedIn</a>
+  <ul class="jump">
+    <li><a href="#industries">industries</a></li>
+    <li><a href="#chooser-sec">which method fits</a></li>
+    <li><a href="#process">how a project runs</a></li>
+    <li><a href="#work">working together</a></li>
+  </ul>
+</div>
+
+<dl class="facts">
+  <div><dt>Doctorate with industry</dt><dd>At Aalto University (2021 to 2026), I worked on the simulations in coating projects with Kemira.</dd></div>
+  <div><dt>From atoms to films</dt><dd>All-atom MD, coarse-grained models, DPD, Monte Carlo, machine learning potentials, and continuum models. I pick the method that fits the scale of the problem.</dd></div>
+  <div><dt>Checked against experiments</dt><dd>I first test every model against data that already exists. My work is in <a href="research.html">eight papers</a>, seven published and one under review.</dd></div>
+  <div><dt>Large simulation campaigns</dt><dd>I script my runs so that they restart on their own, and I run them on CSC supercomputers and university clusters with LAMMPS, GROMACS, HOOMD-blue, and OpenMM.</dd></div>
+</dl>
+
+<section id="industries">
+  <div class="head"><h2>Industries where I can help</h2><p>nine examples</p></div>
+  <ol class="indnav">
+    <li><span class="no">01</span><span><a href="#paper">Paper, board, and packaging</a><span class="h">coatings that keep water out</span></span></li>
+    <li><span class="no">02</span><span><a href="#coatings">Paints, coatings, and adhesives</a><span class="h">how films form and how well they stick</span></span></li>
+    <li><span class="no">03</span><span><a href="#plastics">Plastics, composites, and recycling</a><span class="h">fillers and polymer interfaces</span></span></li>
+    <li><span class="no">04</span><span><a href="#pharma">Pharmaceuticals and drug delivery</a><span class="h">how drugs cross membranes</span></span></li>
+    <li><span class="no">05</span><span><a href="#batteries">Batteries and electrolytes</a><span class="h">how ions move</span></span></li>
+    <li><span class="no">06</span><span><a href="#chips">Semiconductors and electronics</a><span class="h">self-assembly on wafers</span></span></li>
+    <li><span class="no">07</span><span><a href="#capture">Carbon capture and gas separation</a><span class="h">sorbents for CO<sub>2</sub></span></span></li>
+    <li><span class="no">08</span><span><a href="#care">Home and personal care</a><span class="h">surfactants and micelles</span></span></li>
+    <li><span class="no">09</span><span><a href="#metals">Metals and alloys</a><span class="h">defects and machine learning potentials</span></span></li>
+  </ol>
+  <p class="also">The same methods also work for food emulsions, cosmetics, lubricants, construction chemicals, textiles, and membranes for water treatment.</p>
+
+  <article class="ind" id="paper">
+    <div>
+      <p class="meta"><b>01</b>Paper, board, and packaging</p>
+      <h3>Barrier coatings for paper and board</h3>
+      <p class="lead">Packaging is moving from plastic films to thin bio-based coatings on paper and board. A good coating keeps water and grease out, covers the fibers without holes, and does not crack when the board is folded. This was the topic of my doctoral work.</p>
+      <dl class="qa">
+        <dt>Questions I can help with</dt>
+        <dd><ul>
+          <li>Which polymer and block ratio give a closed, ordered film on cellulose or starch?</li>
+          <li>How much coating is enough, and when does the film crack or leave bare spots?</li>
+          <li>Why does one chemistry let water in after stretching while another does not?</li>
+        </ul></dd>
+        <dt>How I would model it</dt>
+        <dd>I use DPD to follow how the coating forms, from the polymer solution to the dry film. Then I use all-atom MD to see how water gets into the hydrophobic layer, before and after stretching.</dd>
+        <dt>Closest to my work</dt>
+        <dd><a href="research.html#p1">Paper 1</a> (block length ratio), <a href="research.html#p2">paper 2</a> (cracking and the composition window), <a href="research.html#p3">paper 3</a> (water under strain), and my <a href="research.html#thesis">doctoral thesis</a>. The two figures are small versions of the models in papers 1 and 2.</dd>
+      </dl>
+    </div>
+    <div class="figs">
+      <div>
+        <figure data-demo="rs-film" data-text="off"></figure>
+        <p class="figcap"><b>A live 2D version of the model in paper 1.</b> Copolymers stick to the surface from water and start to form layers. Change the number of hydrophilic beads per chain and see how the film changes.</p>
+      </div>
+      <div>
+        <figure data-demo="rs-window" data-text="off"></figure>
+        <p class="figcap"><b>The composition window from paper 2.</b> Click the map to set the amounts of copolymer and hydrophobic polymer. With too little copolymer, the coating forms islands, and with too much, the film cracks.</p>
+      </div>
+    </div>
+  </article>
+
+  <article class="ind" id="coatings">
+    <div>
+      <p class="meta"><b>02</b>Paints, coatings, and adhesives</p>
+      <h3>How films form and how well they stick</h3>
+      <p class="lead">Paints, primers, and adhesives have to wet the surface, form a film as they dry, and stay attached under load. A small change in chemistry can decide whether a joint breaks at the interface or inside the material.</p>
+      <dl class="qa">
+        <dt>Questions I can help with</dt>
+        <dd><ul>
+          <li>Does the binder spread on this surface, or does it pull back and leave holes?</li>
+          <li>Does the joint break at the interface or inside the adhesive, and how can we move the weak point?</li>
+          <li>Which surface treatment or primer gives the strongest bond, and how much of it is needed?</li>
+        </ul></dd>
+        <dt>How I would model it</dt>
+        <dd>All-atom MD gives adhesion energies and simulated pull-off tests at the interface. DPD shows how the film forms while it dries. I compare both with peel or pull-off measurements.</dd>
+        <dt>Closest to my work</dt>
+        <dd>In <a href="research.html#p6">paper 6</a>, we found how many grafted chains give the best adhesion between graphene and PLA, and that too many chains make the interface itself the weak point. <a href="research.html#p4">Paper 4</a> is about silane monolayers, which are used as primers and adhesion promoters.</dd>
+      </dl>
+    </div>
+    <div class="figs stick">
+      <div>
+        <figure data-demo="rs-pulloff" data-text="off"></figure>
+        <p class="figcap"><b>Based on paper 6.</b> A graphene sheet is pulled off a polymer. With few grafted chains, the polymer tears and stays on the sheet. With many, the chains cover the sheet, and it comes off cleanly with less work. The chart shows the published energies, and the sketch is a drawing.</p>
+      </div>
+    </div>
+  </article>
+
+  <article class="ind" id="plastics">
+    <div>
+      <p class="meta"><b>03</b>Plastics, composites, and recycling</p>
+      <h3>Fillers and polymer interfaces</h3>
+      <p class="lead">Fillers like graphene, talc, glass fibers, or carbon black only improve a plastic when they are well spread out and the polymer sticks to them. In recycling, the same questions come up for blends of plastics that do not mix.</p>
+      <dl class="qa">
+        <dt>Questions I can help with</dt>
+        <dd><ul>
+          <li>Will this filler spread out in our polymer, or will it clump?</li>
+          <li>Which surface treatment or coupling agent improves load transfer?</li>
+          <li>Which compatibilizer helps a recycled blend, and how much is needed?</li>
+        </ul></dd>
+        <dt>How I would model it</dt>
+        <dd>All-atom MD at the filler surface gives adhesion, pull-out, and load transfer. DPD, with parameters from MD, shows dispersion and blend structure at larger scales.</dd>
+        <dt>Closest to my work</dt>
+        <dd>My M.Sc. work, <a href="research.html#p5">papers 5 to 8</a>. We designed surface treatments for graphene in PLA with simulations, and we studied shape memory composites with MD set up next to lab experiments.</dd>
+      </dl>
+    </div>
+    <div class="figs stick"><figure data-demo="ind-flakes"></figure></div>
+  </article>
+
+  <article class="ind" id="pharma">
+    <div>
+      <p class="meta"><b>04</b>Pharmaceuticals and drug delivery</p>
+      <h3>How drugs cross membranes</h3>
+      <p class="lead">Before a molecule is made, it helps to know if it will cross cell membranes, dissolve well, and stay in its carrier. Free energy simulations can estimate this from the molecular structure.</p>
+      <dl class="qa">
+        <dt>Questions I can help with</dt>
+        <dd><ul>
+          <li>Will this molecule cross a cell membrane, and where does it sit on the way?</li>
+          <li>How well does it dissolve in water compared with the formulation?</li>
+          <li>Will a micelle or polymer carrier hold the drug and release it at the right rate?</li>
+        </ul></dd>
+        <dt>How I would model it</dt>
+        <dd>Umbrella sampling gives the free energy profile across a membrane, and the permeability follows from it. Alchemical free energy methods give solubility, and coarse-grained models describe the carriers.</dd>
+        <dt>Closest to my work</dt>
+        <dd>In <a href="projects.html#n31">project 31</a>, I pulled ibuprofen through a membrane in GROMACS with 27 umbrella windows. In <a href="projects.html#n18">project 18</a>, my hydration free energies matched FreeSolv within 0.17 kcal/mol. <a href="projects.html#n1">Project 1</a> predicts solubility and lipophilicity from structure.</dd>
+      </dl>
+    </div>
+    <div class="figs stick"><figure data-demo="ind-perm"></figure></div>
+  </article>
+
+  <article class="ind" id="batteries">
+    <div>
+      <p class="meta"><b>05</b>Batteries and electrolytes</p>
+      <h3>How ions move in electrolytes</h3>
+      <p class="lead">A good electrolyte lets ions move fast, is not too viscous, and stays stable at the electrodes. MD gives these transport properties and shows what the ions are doing.</p>
+      <dl class="qa">
+        <dt>Questions I can help with</dt>
+        <dd><ul>
+          <li>How do conductivity and viscosity change with salt, solvent, and additives?</li>
+          <li>Do the ions form pairs, and how much current does that cost?</li>
+          <li>How do solvent and ions arrange at the electrode surface?</li>
+        </ul></dd>
+        <dt>How I would model it</dt>
+        <dd>All-atom MD with scaled-charge or polarizable force fields, or with machine learning potentials. Conductivity and viscosity come from the Green-Kubo and Einstein relations.</dd>
+        <dt>Closest to my work</dt>
+        <dd>I have not worked on batteries yet, but these are the methods I use every day. In <a href="projects.html#n26">project 26</a>, my viscosity from MD was within 6 % of NIST data. <a href="projects.html#n27">Project 27</a> automates diffusion runs on clusters, and <a href="projects.html#n10">project 10</a> predicts viscosity with calibrated error bars.</dd>
+      </dl>
+    </div>
+    <div class="figs stick">
+      <div>
+        <figure data-demo="df-ions" data-text="off"></figure>
+        <p class="figcap"><b>Ions in an electric field.</b> Cations and anions drift in opposite directions. When the Coulomb attraction is stronger, they form pairs, and fewer free charges carry the current. This is one reason why conductivity stops rising at high salt concentration.</p>
+      </div>
+    </div>
+  </article>
+
+  <article class="ind" id="chips">
+    <div>
+      <p class="meta"><b>06</b>Semiconductors and electronics</p>
+      <h3>Self-assembly on wafers</h3>
+      <p class="lead">Block copolymers can draw lines only a few nanometers wide on a wafer. Molecular monolayers are used as adhesion promoters, release layers, and masks for selective deposition. Both are self-assembly at a surface, which is what my research is about.</p>
+      <dl class="qa">
+        <dt>Questions I can help with</dt>
+        <dd><ul>
+          <li>Which block copolymer and guide pattern give straight lines with few defects?</li>
+          <li>How does a monolayer pack on an oxide surface, and what does water do to it?</li>
+          <li>Will a resist or underfill stick to the surface after processing?</li>
+        </ul></dd>
+        <dt>How I would model it</dt>
+        <dd>Field models like the one in the figure cover patterns over hundreds of nanometers. DPD and MD show the polymer near the guide and monolayers on oxide surfaces.</dd>
+        <dt>Closest to my work</dt>
+        <dd><a href="research.html#p1">Papers 1</a> and <a href="research.html#p2">2</a> are about block copolymer films that assemble on a surface. <a href="research.html#p4">Paper 4</a> is about alkylsilane monolayers on silica, dry and in water, which I built with my own tool <a href="https://github.com/Kourosh-h/apadana-v4">apadana-v4</a>.</dd>
+      </dl>
+    </div>
+    <div class="figs stick"><figure data-demo="ind-dsa"></figure></div>
+  </article>
+
+  <article class="ind" id="capture">
+    <div>
+      <p class="meta"><b>07</b>Carbon capture and gas separation</p>
+      <h3>Sorbents for CO<sub>2</sub> capture</h3>
+      <p class="lead">A good sorbent takes CO<sub>2</sub> from flue gas or air, ignores most of the nitrogen and water, and gives the CO<sub>2</sub> back without much energy. Simulations can screen thousands of porous materials before any of them is made.</p>
+      <dl class="qa">
+        <dt>Questions I can help with</dt>
+        <dd><ul>
+          <li>How much CO<sub>2</sub> does this material take up at process conditions, and how selectively?</li>
+          <li>How much of it does one pressure or temperature swing recover?</li>
+          <li>What does humidity do to the uptake?</li>
+        </ul></dd>
+        <dt>How I would model it</dt>
+        <dd>Grand canonical Monte Carlo gives adsorption isotherms, and MD gives diffusion in the pores. Machine learning models trained on these results can screen large materials databases.</dd>
+        <dt>Closest to my work</dt>
+        <dd>Monte Carlo and free energy methods are part of my daily work (see the <a href="learn-mc.html">Monte Carlo</a> page), and in <a href="projects.html#n34">project 34</a>, I trained machine learning models on Materials Project data. A full adsorption study would be a new system for me, but with familiar methods.</dd>
+      </dl>
+    </div>
+    <div class="figs stick"><figure data-demo="ind-gcmc"></figure></div>
+  </article>
+
+  <article class="ind" id="care">
+    <div>
+      <p class="meta"><b>08</b>Home and personal care</p>
+      <h3>Surfactants and micelles</h3>
+      <p class="lead">Detergents, shampoos, and creams are crowded mixtures of surfactants, polymers, oils, and active ingredients. Coarse-grained models show which structures form and where the active ingredients end up.</p>
+      <dl class="qa">
+        <dt>Questions I can help with</dt>
+        <dd><ul>
+          <li>Which micelles or phases form at this composition and temperature?</li>
+          <li>Will a fragrance or active stay in the micelles, and how fast does it leave?</li>
+          <li>How does a polymer change the structure, the viscosity, or what sticks to hair and skin?</li>
+        </ul></dd>
+        <dt>How I would model it</dt>
+        <dd>DPD and Martini models with parameters from all-atom MD. From the same runs, I can map phases over composition and estimate release rates.</dd>
+        <dt>Closest to my work</dt>
+        <dd>In my doctoral work, I used DPD for amphiphilic copolymers in water. <a href="projects.html#n13">Project 13</a> derives DPD parameters from MD, and my <a href="projects.html#martini-pluronic">Martini project</a> builds a model for Pluronic, a polymer surfactant used in many formulations.</dd>
+      </dl>
+    </div>
+    <div class="figs stick">
+      <div>
+        <figure data-demo="dr-micelle" data-text="off"></figure>
+        <p class="figcap"><b>Micelles at work.</b> Amphiphilic molecules gather into micelles and pick up oily molecules on the way, like a detergent with grease or a carrier with an active ingredient. With a weaker attraction between the tails, the micelles fall apart.</p>
+      </div>
+    </div>
+  </article>
+
+  <article class="ind" id="metals">
+    <div>
+      <p class="meta"><b>09</b>Metals and alloys</p>
+      <h3>Defects and machine learning potentials</h3>
+      <p class="lead">In metals, simulations help to understand defects, alloying, and how a part starts to yield. Machine learning potentials now bring close to DFT accuracy to large systems. My first degree was in metallurgy.</p>
+      <dl class="qa">
+        <dt>Questions I can help with</dt>
+        <dd><ul>
+          <li>How do strain, temperature, and alloying change where a crystal starts to yield?</li>
+          <li>Is a machine learning potential good enough for this property, or does it fail quietly?</li>
+          <li>How do coatings and oxide layers behave at the metal surface?</li>
+        </ul></dd>
+        <dt>How I would model it</dt>
+        <dd>LAMMPS with EAM-type potentials for large systems, and machine learning potentials such as MACE or GAP, checked against DFT for the properties that matter.</dd>
+        <dt>Closest to my work</dt>
+        <dd>In <a href="projects.html#n30">project 30</a>, I pulled and indented copper with an EAM potential and compared it with the MACE-MP-0 model. MACE-MP-0 gets the elastic constants right, but its stacking fault energy is about four times too low. In <a href="projects.html#n32">project 32</a>, I fitted a GAP potential for silicon. My B.Sc. thesis was on nickel-alumina coatings on steel.</dd>
+      </dl>
+    </div>
+    <div class="figs stick">
+      <div>
+        <figure data-demo="metal" data-text="off"></figure>
+        <p class="figcap"><b>A crystal heated past melting.</b> Atoms with six neighbors are in the crystal (blue), and the rest are defects or liquid (orange). Melting starts at the surface and at defects.</p>
+      </div>
+    </div>
+  </article>
+</section>
+
+<section id="chooser-sec">
+  <div class="head"><h2>Which method fits your question?</h2><p>pick two</p></div>
+  <p class="intro">Choosing the right model is half the work. Pick what you want to know and the size that matters. The box then shows the method I would start with, what it gives you, and my work that used it.</p>
+  <div class="chooser" id="chooser"></div>
+</section>
+
+<section id="screen">
+  <div class="head"><h2>Fewer lab experiments</h2><p>a toy example</p></div>
+  <div class="teaser">
+    <div>
+      <p class="intro" style="margin-top:0">Lab tests are accurate but slow and expensive. Simulations are cheap per recipe but less accurate. When we use both, the simulation scans the whole design space, and the lab tests only the most promising part.</p>
+      <p class="intro">If you set the simulation accuracy to zero, the advantage disappears. This is why I always start by checking the model against existing data.</p>
+    </div>
+    <figure data-demo="screen"></figure>
+  </div>
+</section>
+
+<section id="process">
+  <div class="head"><h2>How a project runs</h2><p>five steps</p></div>
+  <ol class="steps">
+    <li><span><b>The question.</b> What decision should the result support, and what would change it? A clear question saves months of work.</span></li>
+    <li><span><b>The model.</b> All-atom, coarse-grained, DPD, or continuum, depending on the length and time scales that matter. I check it against measurements that already exist.</span></li>
+    <li><span><b>The simulations.</b> A scripted and reproducible set of runs on HPC, so every number can be traced back to its input.</span></li>
+    <li><span><b>The analysis.</b> I turn the trajectories into numbers the lab can compare with, such as permeability, density profiles, adhesion energies, uptake, and order.</span></li>
+    <li><span><b>The answer.</b> Trends, mechanisms, and recipes worth testing, with the limits of the model stated clearly.</span></li>
+  </ol>
+</section>
+
+<section id="work">
+  <div class="head"><h2>Working together</h2><p>four ways</p></div>
+  <ul class="cases">
+    <li><h3>In your R&amp;D team</h3><div><p>As a modeling scientist or simulation engineer who works with the lab and with customers. I am looking for a role like this now.</p></div></li>
+    <li><h3>A joint project</h3><div><p>A project between your company and a university group, like my doctoral work with Kemira. This fits questions that need months rather than weeks.</p></div></li>
+    <li><h3>A short study</h3><div><p>A few weeks on one clear question, to find out if simulations can answer it and what a first model shows.</p></div></li>
+    <li><h3>Training your team</h3><div><p>Courses on MD, DPD, and machine learning for materials, based on my teaching at Aalto University and the <a href="learn.html">learn pages</a> on this site.</p></div></li>
+  </ul>
+</section>
+
+<section id="limits">
+  <div class="head"><h2>Limits of simulations</h2><p></p></div>
+  <p class="intro" style="max-width:46em">Simulations are best at trends, mechanisms, and ranking options. Absolute numbers need calibration against experiments, and a new system takes time to set up and check. The best results come from a few well-chosen experiments together with simulations. The models on this page are simple toy versions that show the idea. A real study uses calibrated models and much larger systems.</p>
+  <p class="intro">If you have a question like the ones above, the easiest way to reach me is <a data-link="linkedin">LinkedIn</a>.</p>
+</section>
+<footer id="footer"></footer>
+</div>
+<script src="data.js"></script>
+<script src="demos/core.js"></script>
+<script src="learn/common.js"></script>
+<script src="demos/dpd2d.js"></script>
+<script src="demos/research.js"></script>
+<script src="demos/industry.js"></script>
+<script src="learn/diffusion.js"></script>
+<script src="learn/drug.js"></script>
+<script src="demos/metal.js"></script>
+<script src="demos/screen.js"></script>
+<script src="chooser.js"></script>
+<script src="site.js"></script>
+</body>
+</html>

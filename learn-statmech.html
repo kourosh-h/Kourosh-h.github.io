@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Statistical mechanics · Kourosh Hasheminejad</title>
+<meta name="description" content="The statistical mechanics behind molecular dynamics, with live examples.">
+<meta name="theme-color" content="#d5d8dc" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kourosh Hasheminejad">
+<meta property="og:title" content="Statistical mechanics · Kourosh Hasheminejad">
+<meta property="og:description" content="The statistical mechanics behind molecular dynamics, with live examples.">
+<meta property="og:url" content="https://kourosh-h.github.io/learn-statmech.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230c0e10'/%3E%3Cpath d='M8 23L16 16L24 9' stroke='%23959ea8' stroke-width='2.4'/%3E%3Ccircle cx='8' cy='23' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='16' cy='16' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='24' cy='9' r='4.8' fill='%23efa458'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Gloock&family=Spline+Sans+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-learn="learn-statmech.html">
+<div class="wrap">
+<header class="nav" id="nav"></header>
+<div class="pagehead">
+  <p class="kicker"><a href="learn.html">Learn</a></p>
+  <h1>Statistical mechanics</h1>
+  <p>MD gives positions and velocities. Statistical mechanics turns them into temperature, pressure, free energy, and heat capacity. Every number from a simulation depends on these ideas, even when nobody mentions them.</p>
+  <ol class="toc" id="toc"></ol>
+</div>
+
+<section class="lesson" id="s1">
+  <div>
+    <h2>The Boltzmann distribution</h2>
+    <p>At equilibrium, a state with energy U is visited with probability proportional to e<sup>&minus;U/kT</sup>. Low energy states are favored, but how strongly they are favored depends on temperature. At high T, the system spreads out, and at low T, it sits in the minima.</p>
+<div class="eq">P(x) = e<sup>&minus;U(x)/kT</sup> / Z,   Z = &int; e<sup>&minus;U(x)/kT</sup> dx</div>
+<p>The normalization Z is the partition function. Everything thermodynamic can be derived from it, and the free energy is F = &minus;kT ln Z. Turned around, any histogram from a simulation gives a free energy profile, F(x) = &minus;kT ln P(x), which is the idea behind most of <a href="learn-sampling.html">enhanced sampling</a>.</p>
+<p class="try">Try: tilt the well and watch the population move to the lower side. Then lower kT and see that the same tilt matters much more.</p>
+  </div>
+  <figure data-demo="sm-boltzmann" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s2">
+  <div>
+    <h2>Velocities and equipartition</h2>
+    <p>Every quadratic term in the energy carries kT/2 on average. This is equipartition, and it is why MD can read the temperature from the kinetic energy. In 3D, &lt;&frac12;mv<sup>2</sup>&gt; = 3kT/2 per atom, minus the constrained degrees of freedom, which are a classic source of small errors in reported temperatures.</p>
+<p>The velocities themselves follow the Maxwell-Boltzmann distribution, whatever the potential. You never have to put it in by hand, because collisions produce it.</p>
+<div class="eq">3D: P(v) = 4&pi;v<sup>2</sup> (m/2&pi;kT)<sup>3/2</sup> e<sup>&minus;mv&sup2;/2kT</sup>     2D: P(v) = (mv/kT) e<sup>&minus;mv&sup2;/2kT</sup></div>
+<p class="try">Try: all particles start at the same speed, so the histogram begins as one spike. Watch it relax to the dashed curve within a few collision times, and note that x and y share the energy equally.</p>
+  </div>
+  <figure data-demo="sm-maxwell" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s3">
+  <div>
+    <h2>Ensembles and fluctuations</h2>
+    <p>An isolated system (NVE, the microcanonical ensemble) has a fixed energy. A system in contact with a heat bath (NVT, canonical) exchanges energy, so its energy fluctuates. These fluctuations are not noise to be removed. They are a property of the system, as the heat capacity shows.</p>
+<div class="eq">C<sub>V</sub> = (&lt;E<sup>2</sup>&gt; &minus; &lt;E&gt;<sup>2</sup>) / kT<sup>2</sup></div>
+<p>The same pattern holds for other ensembles. Volume fluctuations in NPT give the compressibility, and so do particle number fluctuations in the grand canonical ensemble. The relative size of fluctuations shrinks like 1/&radic;N, which is why ensembles agree on averages for large systems but not for small ones.</p>
+<p>This is also why a thermostat that suppresses fluctuations, such as Berendsen, gives the right average temperature but the wrong heat capacity. See the <a href="learn-md.html">thermostats</a> section.</p>
+<p class="try">Try: switch the bath off, and the energy freezes (NVE). Switch it on, and compare the heat capacity from the fluctuations with the exact value of 2N. Then, change N and watch the trace get smoother.</p>
+  </div>
+  <figure data-demo="sm-fluct" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s4">
+  <div>
+    <h2>Entropy and the second law</h2>
+    <p>Entropy counts how many microscopic arrangements belong to the same macroscopic state, S = k ln &Omega;. A gas squeezed into one corner has far fewer arrangements than one filling the box, so spreading out is overwhelmingly likely.</p>
+<p>The equations of motion are time-reversible, yet entropy only goes up. The answer is that the second law is statistical. Going back is not forbidden, but it is extremely unlikely for a random start. Reversing every velocity at once is the one way to do it, and MD can do that exactly, which no experiment can.</p>
+<p class="try">Try: let the gas spread, and then click to reverse all velocities. The gas walks back into its corner, and the entropy drops. With more particles, wait longer before reversing. Small rounding errors grow, and the return becomes less perfect.</p>
+  </div>
+  <figure data-demo="sm-entropy" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s5">
+  <div>
+    <h2>Ergodicity: time averages and ensemble averages</h2>
+    <p>Statistical mechanics averages over the ensemble, which means all states with their Boltzmann weights. MD averages over time along one trajectory. The two agree only if the trajectory visits all the relevant states, which is the ergodic hypothesis.</p>
+<p>In practice, the danger is not strict non-ergodicity, but barriers. The waiting time to cross a barrier grows like e<sup>&Delta;U/kT</sup>, so a barrier of 10 kT can already hold a simulation in one state for its whole length. The averages then look converged, with small error bars, and are still wrong.</p>
+<p class="try">Try: at h = 3, the running average settles near zero. At h = 8, the particle stays on one side, and the average sits near &minus;1, which looks certain but is wrong. This is the problem that <a href="learn-sampling.html">enhanced sampling</a> solves.</p>
+  </div>
+  <figure data-demo="sm-ergodic" data-text="off"></figure>
+</section>
+
+<nav class="pager" id="pager"></nav>
+<footer id="footer"></footer>
+</div>
+<script src="data.js"></script>
+<script src="demos/core.js"></script>
+<script src="learn/common.js"></script>
+<script src="learn/statmech.js"></script>
+<script src="site.js"></script>
+</body>
+</html>

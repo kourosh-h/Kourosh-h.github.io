@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Drug discovery · Kourosh Hasheminejad</title>
+<meta name="description" content="How simulations and data help to find new drugs through binding, screening, and optimization, with live examples.">
+<meta name="theme-color" content="#d5d8dc" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kourosh Hasheminejad">
+<meta property="og:title" content="Drug discovery · Kourosh Hasheminejad">
+<meta property="og:description" content="How simulations and data help to find new drugs through binding, screening, and optimization, with live examples.">
+<meta property="og:url" content="https://kourosh-h.github.io/learn-discovery.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230c0e10'/%3E%3Cpath d='M8 23L16 16L24 9' stroke='%23959ea8' stroke-width='2.4'/%3E%3Ccircle cx='8' cy='23' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='16' cy='16' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='24' cy='9' r='4.8' fill='%23efa458'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Gloock&family=Spline+Sans+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-learn="learn-discovery.html">
+<div class="wrap">
+<header class="nav" id="nav"></header>
+<div class="pagehead">
+  <p class="kicker"><a href="learn.html">Learn</a></p>
+  <h1>Drug discovery</h1>
+  <p>Finding a drug means narrowing millions of possible molecules down to one that binds its target, reaches it in the body, and does little else. Simulation and machine learning help at almost every step, mostly by deciding what is worth making next. Docking and drug carriers are explained on the <a href="learn-drug.html">drug delivery and docking</a> page.</p>
+  <ol class="toc" id="toc"></ol>
+</div>
+
+<section class="lesson" id="s1">
+  <div>
+    <h2>Binding free energy and K<sub>d</sub></h2>
+    <p>How tightly a drug binds is measured by the dissociation constant K<sub>d</sub>, which is the concentration at which half of the targets are occupied. It is set by the binding free energy.</p>
+<div class="eq">&Delta;G<sub>bind</sub> = RT ln K<sub>d</sub>     (K<sub>d</sub> in mol/L, RT = 0.593 kcal/mol at 298 K)</div>
+<p>Every 1.4 kcal/mol is a factor of ten. A typical hit binds at a micromolar K<sub>d</sub> (about &minus;8 kcal/mol), and a drug at a nanomolar K<sub>d</sub> (about &minus;12). Therefore, the difference between a weak hit and a drug is only a few kcal/mol, which is smaller than the error of most scoring functions. This is why careful <a href="learn-sampling.html">free energy</a> methods, such as alchemical FEP, are used in lead optimization, where an accuracy of about 1 kcal/mol pays off.</p>
+<p class="try">Try: set the ligand to 10<sup>&minus;7</sup> M, and move &Delta;G from &minus;8 to &minus;12. The occupancy goes from almost nothing to almost full.</p>
+  </div>
+  <figure data-demo="dd-binding" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s2">
+  <div>
+    <h2>Virtual screening and enrichment</h2>
+    <p>A library may hold millions of compounds, and only a handful of them bind. Docking or a machine learning model scores them all, and only the top of the list is tested. The score does not need to be accurate in absolute terms. It only needs to put more binders near the top than chance would, and the enrichment factor measures exactly this.</p>
+<p>Two habits matter. First, test the method on known actives and decoys before trusting it on new compounds. Second, split the data by scaffold when training ML models, or the reported performance will be too optimistic, as I found in <a href="projects.html#n1">project 1</a>.</p>
+<p class="try">Try: at r = 0, the curve follows the diagonal (random). At r = 0.5, the top 5% already holds a large share of the binders, even though the scatter looks poor.</p>
+  </div>
+  <figure data-demo="dd-screen" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s3">
+  <div>
+    <h2>Optimizing more than potency</h2>
+    <p>A molecule that binds strongly but does not dissolve, crosses no membranes, or blocks the hERG channel is not a drug. Lead optimization balances several properties at once, such as potency, solubility, permeability, metabolic stability, and safety. Many of them pull against each other through lipophilicity, so there is rarely one best molecule, but rather a front of good compromises.</p>
+<p>Simple rules, such as Lipinski's rule of five (molecular weight under 500, logP under 5, and few hydrogen bond donors and acceptors), are a first filter. QSAR and ML models predict the rest, and free energy calculations check the most promising ideas before synthesis.</p>
+<p class="try">Try: move the weight from potency to solubility, and watch the chosen candidate slide along the front. If you raise the solubility limit, the most potent candidates drop out.</p>
+  </div>
+  <figure data-demo="dd-mpo" data-text="off"></figure>
+</section>
+
+<nav class="pager" id="pager"></nav>
+<footer id="footer"></footer>
+</div>
+<script src="data.js"></script>
+<script src="demos/core.js"></script>
+<script src="learn/common.js"></script>
+<script src="learn/discovery.js"></script>
+<script src="site.js"></script>
+</body>
+</html>

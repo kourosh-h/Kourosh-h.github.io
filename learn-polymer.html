@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Polymers in solution · Kourosh Hasheminejad</title>
+<meta name="description" content="Chain size, solvent quality, and mixing of polymers, with live examples.">
+<meta name="theme-color" content="#d5d8dc" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kourosh Hasheminejad">
+<meta property="og:title" content="Polymers in solution · Kourosh Hasheminejad">
+<meta property="og:description" content="Chain size, solvent quality, and mixing of polymers, with live examples.">
+<meta property="og:url" content="https://kourosh-h.github.io/learn-polymer.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230c0e10'/%3E%3Cpath d='M8 23L16 16L24 9' stroke='%23959ea8' stroke-width='2.4'/%3E%3Ccircle cx='8' cy='23' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='16' cy='16' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='24' cy='9' r='4.8' fill='%23efa458'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Gloock&family=Spline+Sans+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-learn="learn-polymer.html">
+<div class="wrap">
+<header class="nav" id="nav"></header>
+<div class="pagehead">
+  <p class="kicker"><a href="learn.html">Learn</a></p>
+  <h1>Polymers in solution</h1>
+  <p>A polymer chain is a long string of beads, and most of its behavior comes from statistics. What matters is how many ways the chain can arrange itself, and how much each bead likes its neighbors compared with the solvent.</p>
+  <ol class="toc" id="toc"></ol>
+</div>
+
+<section class="lesson" id="s1">
+  <div>
+    <h2>Good, theta, and poor solvents</h2>
+    <p>In a good solvent, the beads would rather touch the solvent than each other, so the chain swells. In a poor solvent, the beads stick together, and the chain collapses into a globule. In between is the theta point, where the two effects cancel and the chain behaves like an ideal random walk.</p>
+<div class="eq">R<sub>g</sub> ~ N<sup>&nu;</sup>:   &nu; = 3/4 (good, 2D), 3/5 (good, 3D),   1/2 (theta),   1/d (poor, globule)</div>
+<p>Here, the solvent quality is set by the attraction &epsilon; between the beads, and the solvent itself is left implicit.</p>
+<p class="try">Try: start at &epsilon; = 0 and slowly raise it. The chain goes from a swollen coil to a compact globule, and R<sub>g</sub> drops in the plot.</p>
+  </div>
+  <figure data-demo="po-solvent" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s2">
+  <div>
+    <h2>Scaling of chain size</h2>
+    <p>Self-avoiding walks on a lattice are the simplest model of a chain in a good solvent. If you measure R for many lengths N and fit a line on a log-log plot, you get the exponent &nu;.</p>
+<p class="try">Try: compare the fitted &nu; with 3/4, the exact 2D value.</p>
+  </div>
+  <figure data-demo="an-chain" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s3">
+  <div>
+    <h2>Mixing two polymers: Flory-Huggins</h2>
+    <p>Two polymers rarely mix. The entropy of mixing is divided by the chain length N, so for long chains, it is tiny, while the interaction cost &chi; per contact is not. This is why even a small &chi; separates long chains.</p>
+<div class="eq">&Delta;G<sub>mix</sub>/kT = (&phi;/N<sub>A</sub>) ln &phi; + ((1&minus;&phi;)/N<sub>B</sub>) ln(1&minus;&phi;) + &chi;&phi;(1&minus;&phi;)<br>critical point (N<sub>A</sub> = N<sub>B</sub> = N): &chi;<sub>c</sub> = 2/N</div>
+<p>When the curve has two minima, a mixture in between lowers its free energy by splitting into two phases. Inside the spinodal, it splits right away, and between the spinodal and the binodal, it needs a nucleus first. This is also the &chi; that DPD parameters are mapped to, as explained on the <a href="learn-dpd.html">DPD</a> page.</p>
+<p class="try">Try: set N = 1 (small molecules), and see how large &chi; must be to separate them. Then, set N = 200.</p>
+  </div>
+  <figure data-demo="po-flory" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s4">
+  <div>
+    <h2>Many chains</h2>
+    <p>At higher concentrations, the chains overlap and entangle. Then, the size of one chain is screened back to ideal (&nu; = 1/2), and the dynamics slow down a lot, which is why polymer melts are so viscous.</p>
+  </div>
+  <figure data-demo="polymer" data-text="off"></figure>
+</section>
+
+<nav class="pager" id="pager"></nav>
+<footer id="footer"></footer>
+</div>
+<script src="data.js"></script>
+<script src="demos/core.js"></script>
+<script src="learn/common.js"></script>
+<script src="learn/polysol.js"></script>
+<script src="learn/analysis.js"></script>
+<script src="demos/polymer.js"></script>
+<script src="site.js"></script>
+</body>
+</html>

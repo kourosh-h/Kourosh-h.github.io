@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Drug delivery and docking · Kourosh Hasheminejad</title>
+<meta name="description" content="Molecular docking, drug carriers, and release, with live examples.">
+<meta name="theme-color" content="#d5d8dc" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kourosh Hasheminejad">
+<meta property="og:title" content="Drug delivery and docking · Kourosh Hasheminejad">
+<meta property="og:description" content="Molecular docking, drug carriers, and release, with live examples.">
+<meta property="og:url" content="https://kourosh-h.github.io/learn-drug.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230c0e10'/%3E%3Cpath d='M8 23L16 16L24 9' stroke='%23959ea8' stroke-width='2.4'/%3E%3Ccircle cx='8' cy='23' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='16' cy='16' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='24' cy='9' r='4.8' fill='%23efa458'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Gloock&family=Spline+Sans+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-learn="learn-drug.html">
+<div class="wrap">
+<header class="nav" id="nav"></header>
+<div class="pagehead">
+  <p class="kicker"><a href="learn.html">Learn</a></p>
+  <h1>Drug delivery and docking</h1>
+  <p>Two questions come up again and again in drug design. Does the molecule bind to its target, and how do we get it there? Docking answers the first question quickly but roughly, and simulations of carriers help with the second.</p>
+  <ol class="toc" id="toc"></ol>
+</div>
+
+<section class="lesson" id="s1">
+  <div>
+    <h2>Docking a ligand</h2>
+    <p>Docking places a small molecule (the ligand) in the binding pocket of a protein (the receptor) and scores each pose. The score is a quick estimate of binding from van der Waals contacts and electrostatics. Real codes also include hydrogen bonds, desolvation, and a penalty for frozen rotatable bonds.</p>
+<p>A search algorithm tries many positions and orientations. Monte Carlo with a slowly decreasing temperature (simulated annealing) and genetic algorithms are common choices, and AutoDock and Vina work in this way.</p>
+<div class="eq">score = &Sigma;<sub>ij</sub> [ 4&epsilon;((&sigma;/r)<sup>12</sup> &minus; (&sigma;/r)<sup>6</sup>) + q<sub>i</sub>q<sub>j</sub> / (4 r &middot; r) ]</div>
+<p>Docking scores rank poses well, but they are not real binding free energies. For these, you need MD with free energy methods, as explained on the page on <a href="learn-sampling.html">enhanced sampling</a>.</p>
+<p class="try">Try: drag the ligand into the pocket by hand. Then, flip it so that its charges point the wrong way, and see the electrostatic bar change sign. Finally, switch on the search.</p>
+  </div>
+  <figure data-demo="dr-dock" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s2">
+  <div>
+    <h2>Loading drugs into micelles</h2>
+    <p>Many drugs are hydrophobic and do not dissolve in blood. Amphiphilic molecules or block copolymers can wrap them up. The hydrophobic tails form a core, the heads face the water, and the drug hides in the core. This is called a micelle carrier.</p>
+<p>Coarse-grained and DPD simulations show how much drug a micelle can hold and where the drug sits, which is hard to measure directly.</p>
+<p class="try">Try: switch the attraction off, and the amphiphiles stay dispersed while the drug stays in water. Turn it up, and micelles form and take up the drug.</p>
+  </div>
+  <figure data-demo="dr-micelle" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s3">
+  <div>
+    <h2>Release from a carrier</h2>
+    <p>Once in place, the drug has to get out at the right rate. Two limits are worth knowing. If the shell is very permeable, the release is limited by diffusion inside the carrier, and the released amount grows like &radic;t at first (the Higuchi law). If the shell is the bottleneck, the release is first order. The same fraction leaves per unit time, which gives an exponential curve.</p>
+<div class="eq">diffusion limited: M<sub>t</sub>/M<sub>&infin;</sub> &asymp; k &radic;t   (early times)<br>membrane limited: M<sub>t</sub>/M<sub>&infin;</sub> = 1 &minus; e<sup>&minus;kt</sup></div>
+<p>Responsive carriers change their permeability in response to a trigger, such as pH or temperature, and the slider here plays the same role.</p>
+<p class="try">Try: at a permeability of 1, the release follows the dashed &radic;t curve early on. If you make it small, the curve becomes exponential and much slower.</p>
+  </div>
+  <figure data-demo="dr-release" data-text="off"></figure>
+</section>
+
+<nav class="pager" id="pager"></nav>
+<footer id="footer"></footer>
+</div>
+<script src="data.js"></script>
+<script src="demos/core.js"></script>
+<script src="learn/common.js"></script>
+<script src="learn/drug.js"></script>
+<script src="site.js"></script>
+</body>
+</html>

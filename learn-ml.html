@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Machine learning in MD · Kourosh Hasheminejad</title>
+<meta name="description" content="How machine learning is used in molecular simulation, with live examples.">
+<meta name="theme-color" content="#d5d8dc" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kourosh Hasheminejad">
+<meta property="og:title" content="Machine learning in MD · Kourosh Hasheminejad">
+<meta property="og:description" content="How machine learning is used in molecular simulation, with live examples.">
+<meta property="og:url" content="https://kourosh-h.github.io/learn-ml.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230c0e10'/%3E%3Cpath d='M8 23L16 16L24 9' stroke='%23959ea8' stroke-width='2.4'/%3E%3Ccircle cx='8' cy='23' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='16' cy='16' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='24' cy='9' r='4.8' fill='%23efa458'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Gloock&family=Spline+Sans+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-learn="learn-ml.html">
+<div class="wrap">
+<header class="nav" id="nav"></header>
+<div class="pagehead">
+  <p class="kicker"><a href="learn.html">Learn</a></p>
+  <h1>Machine learning in MD</h1>
+  <p>Machine learning enters MD in three main places. It can learn the potential energy from quantum data, choose which calculations to run, and make sense of long trajectories. The examples on this page show the core idea of each.</p>
+  <ol class="toc" id="toc"></ol>
+</div>
+
+<section class="lesson" id="s1">
+  <div>
+    <h2>Describing an atom to a model</h2>
+    <p>A model cannot take raw coordinates, because the energy does not change if you rotate or move the whole system, or swap two identical atoms. Therefore, each atom is described by features of its neighborhood that already have these symmetries.</p>
+<p>Behler-Parrinello symmetry functions are the classic example, and they are smooth sums over the neighbors inside a cutoff. Modern models such as SchNet, NequIP, and MACE learn the features with graph neural networks instead.</p>
+<div class="eq">G(R<sub>s</sub>) = &Sigma;<sub>j</sub> exp(&minus;&eta;(r<sub>ij</sub> &minus; R<sub>s</sub>)<sup>2</sup>) f<sub>c</sub>(r<sub>ij</sub>)</div>
+<p class="try">Try: drag a neighbor and see which bars change. Then, turn the whole group, and nothing changes.</p>
+  </div>
+  <figure data-demo="ml-descriptor" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s2">
+  <div>
+    <h2>A neural network potential</h2>
+    <p>The total energy is written as a sum of atomic energies, and a network predicts each of them from the descriptor of that atom. The forces come from the derivative of the energy, so they are consistent by construction. Training uses energies and forces from DFT.</p>
+<p>Here, the system is a single pair of atoms. The network learns the curve well where it has data, but it does whatever it likes outside the data. Real ML potentials fail in the same way when MD wanders into configurations that are missing from the training set.</p>
+<p class="try">Try: shrink the data range. The curve beyond the data goes wrong, even though the training loss is tiny.</p>
+  </div>
+  <figure data-demo="ml-potential" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s3">
+  <div>
+    <h2>Active learning</h2>
+    <p>Quantum calculations are expensive, so it pays to pick them wisely. A model that knows its uncertainty, such as a Gaussian process or an ensemble of networks, can point at the configuration that it is least sure about. You compute that configuration, add it to the data, retrain, and repeat.</p>
+<p>Most modern ML potentials are built with this loop. You run MD with the current model, flag the uncertain frames, and send them to DFT. <a href="projects.html#n11">Project 11</a> does this for ethanol.</p>
+<p class="try">Try: compare random picks with picks based on uncertainty. The second strategy reaches a small error with fewer points.</p>
+  </div>
+  <figure data-demo="ml-active" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s4">
+  <div>
+    <h2>Finding states in a trajectory</h2>
+    <p>Long trajectories are too big to watch. Clustering the visited configurations gives the metastable states, and counting the jumps between clusters gives a transition matrix. This is the basis of Markov state models, which turn many short simulations into long-time kinetics. <a href="projects.html#n3">Project 3</a> finds such states in my own runs of a small peptide.</p>
+<p>In practice, the clustering is done on features such as dihedrals or distances, often after a dimension reduction such as PCA or TICA.</p>
+<p class="try">Try: choose k = 3 to match the three basins, and lower kT to see the transitions become rare.</p>
+  </div>
+  <figure data-demo="ml-states" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s5">
+  <div>
+    <h2>Classifying local structure</h2>
+    <p>The same unsupervised approach also works for single atoms. You describe each atom by its neighborhood, and then cluster the atoms. This separates crystal from liquid, finds grain boundaries, or picks out water molecules bound to a surface.</p>
+  </div>
+  <figure data-demo="an-classify" data-text="off"></figure>
+</section>
+
+<nav class="pager" id="pager"></nav>
+<footer id="footer"></footer>
+</div>
+<script src="data.js"></script>
+<script src="demos/core.js"></script>
+<script src="learn/common.js"></script>
+<script src="learn/cg.js"></script>
+<script src="learn/mlmd.js"></script>
+<script src="learn/analysis.js"></script>
+<script src="site.js"></script>
+</body>
+</html>

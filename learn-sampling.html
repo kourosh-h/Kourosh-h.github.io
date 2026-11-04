@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Free energy and enhanced sampling · Kourosh Hasheminejad</title>
+<meta name="description" content="Free energy methods and enhanced sampling, with live examples.">
+<meta name="theme-color" content="#d5d8dc" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kourosh Hasheminejad">
+<meta property="og:title" content="Free energy and enhanced sampling · Kourosh Hasheminejad">
+<meta property="og:description" content="Free energy methods and enhanced sampling, with live examples.">
+<meta property="og:url" content="https://kourosh-h.github.io/learn-sampling.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230c0e10'/%3E%3Cpath d='M8 23L16 16L24 9' stroke='%23959ea8' stroke-width='2.4'/%3E%3Ccircle cx='8' cy='23' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='16' cy='16' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='24' cy='9' r='4.8' fill='%23efa458'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Gloock&family=Spline+Sans+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-learn="learn-sampling.html">
+<div class="wrap">
+<header class="nav" id="nav"></header>
+<div class="pagehead">
+  <p class="kicker"><a href="learn.html">Learn</a></p>
+  <h1>Free energy and enhanced sampling</h1>
+  <p>The free energy F(x) along a coordinate x tells you which states are stable and how high the barriers between them are. Plain MD gets it from how often each x is visited, but barriers of more than a few kT are crossed so rarely that the histogram never fills. Enhanced sampling methods solve this problem. All the examples on this page use the same double well.</p>
+  <ol class="toc" id="toc"></ol>
+</div>
+
+<section class="lesson" id="s1">
+  <div>
+    <h2>Free energy from a histogram</h2>
+    <p>If the simulation samples the Boltzmann distribution, the probability of x gives the free energy directly.</p>
+<div class="eq">F(x) = &minus;kT ln P(x) + const</div>
+<p>The catch is ergodicity, because the walker has to cross the barrier many times. The crossing rate falls roughly as exp(&minus;&Delta;F/kT).</p>
+<p class="try">Try: lower kT. The barrier region stays empty, and the estimate falls apart.</p>
+  </div>
+  <figure data-demo="es-hist" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s2">
+  <div>
+    <h2>Umbrella sampling and WHAM</h2>
+    <p>In umbrella sampling, you run several simulations, and each one is held near a different point x by a harmonic spring (an umbrella). Each window samples its small region well, including the top of the barrier.</p>
+<p>WHAM (weighted histogram analysis) then removes the effect of the springs and stitches the windows into one free energy curve. It solves two equations self-consistently, for P(x) and for the free energy f<sub>i</sub> of each window.</p>
+<p class="try">Try: too few windows or too stiff springs leave gaps between the histograms, and the curve breaks at these gaps.</p>
+  </div>
+  <figure data-demo="es-umbrella" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s3">
+  <div>
+    <h2>Metadynamics</h2>
+    <p>Metadynamics builds a bias as it goes. Every so often it drops a small Gaussian hill at the current position. The hills pile up in the well where the system sits, until it spills over the barrier into the next well. Once the landscape is flat, the accumulated bias is the negative of the free energy.</p>
+<div class="eq">V<sub>bias</sub>(x, t) = &Sigma; H exp(&minus;(x &minus; x<sub>k</sub>)<sup>2</sup> / 2w<sup>2</sup>)<br>F(x) &asymp; &minus;V<sub>bias</sub>(x) + const</div>
+<p>Well-tempered metadynamics shrinks the hills over time, so that the estimate converges smoothly.</p>
+<p class="try">Try: big hills fill the wells fast but give a rough estimate, while small hills are slow and smooth.</p>
+  </div>
+  <figure data-demo="es-metad" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s4">
+  <div>
+    <h2>Metadynamics on a 2D landscape</h2>
+    <p>The idea is easiest to see in two collective variables. The walker starts trapped in the deepest basin. Each hill makes the place it has been a little less attractive, so it is pushed to explore. The basin fills like a bowl being filled with sand. Then, the walker spills into the next basin, and that basin fills too.</p>
+<p>In a real run, the collective variables (CVs) are quantities such as a distance, an angle, or a coordination number, chosen so that they separate the states that you care about. Picking good CVs is the hard part. If a slow motion is missing from the CVs, metadynamics will not speed it up.</p>
+<p class="try">Try: compare plain and well-tempered hills. Plain hills keep piling up and overfill the landscape, while well-tempered hills get smaller where the bias is already high, so the shading settles down. Click to restart somewhere else.</p>
+  </div>
+  <figure data-demo="es-metad2d" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s5">
+  <div>
+    <h2>Replica exchange</h2>
+    <p>In replica exchange, you run copies of the system at several temperatures. The hot copies cross barriers easily. Every so often, neighboring copies try to swap configurations, and a swap is accepted with a Metropolis rule that keeps every temperature sampling correctly.</p>
+<div class="eq">P(swap) = min(1, exp[(&beta;<sub>i</sub> &minus; &beta;<sub>j</sub>)(U<sub>i</sub> &minus; U<sub>j</sub>)])</div>
+<p>The cold copy then gets new configurations from the hot ones, without needing to know the reaction coordinate. The temperatures must be close enough for the swaps to be accepted.</p>
+<p class="try">Try: switch the swaps off. The cold replica then stays stuck in its starting well.</p>
+  </div>
+  <figure data-demo="es-remd" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s6">
+  <div>
+    <h2>Steered MD and the Jarzynski equality</h2>
+    <p>Steered MD pulls the system along x with a moving spring and measures the work. Pulling fast wastes energy as heat, so the average work is larger than &Delta;F. However, Jarzynski showed that an exponential average of the work gives &Delta;F exactly, even for fast pulling.</p>
+<div class="eq">&Delta;F = &minus;kT ln &lang; exp(&minus;W/kT) &rang;</div>
+<p>The exponential average is dominated by rare pulls with low work, so in practice, you need many pulls, or slow ones.</p>
+<p class="try">Try: pull fast, and compare the mean work with the Jarzynski estimate. The true &Delta;F here is 0.</p>
+  </div>
+  <figure data-demo="es-jarzynski" data-text="off"></figure>
+</section>
+
+<nav class="pager" id="pager"></nav>
+<footer id="footer"></footer>
+</div>
+<script src="data.js"></script>
+<script src="demos/core.js"></script>
+<script src="learn/common.js"></script>
+<script src="learn/sampling.js"></script>
+<script src="site.js"></script>
+</body>
+</html>

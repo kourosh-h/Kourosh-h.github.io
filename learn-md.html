@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Molecular dynamics · Kourosh Hasheminejad</title>
+<meta name="description" content="How molecular dynamics works, with live examples.">
+<meta name="theme-color" content="#d5d8dc" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kourosh Hasheminejad">
+<meta property="og:title" content="Molecular dynamics · Kourosh Hasheminejad">
+<meta property="og:description" content="How molecular dynamics works, with live examples.">
+<meta property="og:url" content="https://kourosh-h.github.io/learn-md.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230c0e10'/%3E%3Cpath d='M8 23L16 16L24 9' stroke='%23959ea8' stroke-width='2.4'/%3E%3Ccircle cx='8' cy='23' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='16' cy='16' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='24' cy='9' r='4.8' fill='%23efa458'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Gloock&family=Spline+Sans+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-learn="learn-md.html">
+<div class="wrap">
+<header class="nav" id="nav"></header>
+<div class="pagehead">
+  <p class="kicker"><a href="learn.html">Learn</a></p>
+  <h1>Molecular dynamics</h1>
+  <p>MD solves Newton's equations for every particle, one small time step at a time. Most of the skill lies in four choices. You have to decide how to step forward in time, how far to compute forces, what to do at the edges of the box, and how to hold the temperature.</p>
+  <ol class="toc" id="toc"></ol>
+</div>
+
+<section class="lesson" id="s1">
+  <div>
+    <h2>Stepping forward in time</h2>
+    <p>The simplest idea, Euler's method, updates positions with the old velocity and velocities with the old force. It looks fine for one step but adds a little energy every time, so the orbit spirals outward.</p>
+<p>Velocity Verlet splits the velocity update into two halves around the position update. It is time-reversible and keeps the energy bounded, which is why almost every MD code uses it, or its close relative, the leapfrog scheme.</p>
+<div class="eq">v(t + dt/2) = v(t) + (dt/2m) F(t)<br>x(t + dt) = x(t) + dt v(t + dt/2)<br>v(t + dt) = v(t + dt/2) + (dt/2m) F(t + dt)</div>
+<p class="try">Try: raise dt. Euler blows up quickly, while Verlet stays on a slightly distorted ellipse until dt gets close to 2/ω, where it also becomes unstable. In real systems, the fastest motion, often an X-H bond vibration, sets dt (1 to 2 fs).</p>
+  </div>
+  <figure data-demo="md-integrator" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s2">
+  <div>
+    <h2>Cutting off the interactions</h2>
+    <p>Computing every pair costs O(N<sup>2</sup>). Short-range forces such as Lennard-Jones are therefore cut at a distance r<sub>c</sub>, usually 2.5&sigma; or about 1 to 1.2 nm, and neighbor lists keep track of which particles are close.</p>
+<p>A plain cut makes the energy jump when a pair crosses r<sub>c</sub>, which spoils energy conservation. Shifting the potential fixes the energy, but the force still jumps. Force-shifted or switched potentials make both smooth. Long-range electrostatics are not cut at all, but handled with Ewald sums or PME.</p>
+<p class="try">Try: switch between the three kinds at a short cutoff, such as 1.3, and look at what happens at r<sub>c</sub>.</p>
+  </div>
+  <figure data-demo="md-cutoff" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s3">
+  <div>
+    <h2>Periodic boundaries</h2>
+    <p>A simulation box holds thousands of particles, far fewer than a real sample, and a large share of them would sit at a surface. Periodic boundaries remove this surface. The box is surrounded by copies of itself, and a particle that leaves one side comes back on the other.</p>
+<p>Each particle only interacts with the nearest copy of every other particle, which is called the minimum image. This is also why the cutoff must be less than half the box length.</p>
+<div class="eq">dx = x<sub>j</sub> &minus; x<sub>i</sub><br>dx = dx &minus; L &middot; round(dx / L)</div>
+<p class="try">Try: click a particle near an edge. Some of its neighbors are on the far side of the box.</p>
+  </div>
+  <figure data-demo="md-pbc" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s4">
+  <div>
+    <h2>Holding the temperature</h2>
+    <p>Plain MD conserves energy (the NVE ensemble). To simulate at a fixed temperature, a thermostat adds or removes kinetic energy. The temperature itself comes from the kinetic energy, which in 2D gives k<sub>B</sub>T = &Sigma; m v<sup>2</sup> / 2N.</p>
+<ul><li><b>Berendsen</b> rescales velocities toward the target. It is smooth and quick, but it suppresses fluctuations, so it does not give a correct canonical ensemble. It is fine for equilibration.</li>
+<li><b>Langevin</b> adds friction and random kicks to each particle. It samples the canonical ensemble correctly, but it disturbs the dynamics.</li>
+<li><b>Nos&eacute;-Hoover</b> and the velocity-rescaling thermostat of Bussi et al. are the usual choices for production runs.</li></ul>
+<p class="try">Try: start with no thermostat and watch T drift as the lattice melts. Then, switch on Berendsen and Langevin, and compare the size of the fluctuations.</p>
+  </div>
+  <figure data-demo="md-thermostat" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s5">
+  <div>
+    <h2>Equations of motion compared</h2>
+    <p>"Running MD" can mean quite different equations. Here, the same starting configuration is copied six times, and each copy is moved with a different rule.</p>
+<ul><li><b>Euler</b> is the naive update. The energy grows every step until the system blows up.</li>
+<li><b>Velocity Verlet</b> is plain Newtonian dynamics done right. The energy wobbles but does not drift, and the temperature settles wherever energy conservation puts it.</li>
+<li><b>Langevin</b> dynamics adds friction and random kicks on every particle. The temperature is correct, but momentum is not conserved, so hydrodynamic flow is damped.</li>
+<li><b>Brownian</b> dynamics is the overdamped limit, with no velocities at all. It is good for slow colloids and for polymers in implicit solvent, and it is the cheapest.</li>
+<li>In <b>DPD</b>, friction and noise act on pairs, along the line between them, so momentum is conserved and flow behaves properly.</li>
+<li>In <b>Nos&eacute;-Hoover</b> dynamics, one extra variable acts as a friction that turns positive when the system is too hot and negative when it is too cold. The method is deterministic, and the energy, including the thermostat, is conserved.</li></ul>
+<div class="eq">Newton: m dv/dt = F<br>Langevin: m dv/dt = F &minus; &gamma;mv + &radic;(2&gamma;mkT) &xi;(t)<br>Brownian: &gamma; dx/dt = F + &radic;(2&gamma;kT) &xi;(t)<br>Nos&eacute;-Hoover: m dv/dt = F &minus; &zeta;mv,   d&zeta;/dt = (T/T<sub>0</sub> &minus; 1)/&tau;<sup>2</sup></div>
+<p class="try">Try: push dt up and watch Euler fail first, and then everything else. If you change the target T, Verlet ignores it, while the thermostats follow. If you raise &gamma;, the Langevin and Brownian copies slow down, while DPD still flows.</p>
+  </div>
+  <figure data-demo="md-eom" data-text="off"></figure>
+</section>
+
+<nav class="pager" id="pager"></nav>
+<footer id="footer"></footer>
+</div>
+<script src="data.js"></script>
+<script src="demos/core.js"></script>
+<script src="learn/common.js"></script>
+<script src="learn/md.js"></script>
+<script src="site.js"></script>
+</body>
+</html>

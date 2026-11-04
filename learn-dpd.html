@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dissipative particle dynamics · Kourosh Hasheminejad</title>
+<meta name="description" content="How DPD works, with live examples including self-assembling coatings.">
+<meta name="theme-color" content="#d5d8dc" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kourosh Hasheminejad">
+<meta property="og:title" content="Dissipative particle dynamics · Kourosh Hasheminejad">
+<meta property="og:description" content="How DPD works, with live examples including self-assembling coatings.">
+<meta property="og:url" content="https://kourosh-h.github.io/learn-dpd.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230c0e10'/%3E%3Cpath d='M8 23L16 16L24 9' stroke='%23959ea8' stroke-width='2.4'/%3E%3Ccircle cx='8' cy='23' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='16' cy='16' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='24' cy='9' r='4.8' fill='%23efa458'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Gloock&family=Spline+Sans+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-learn="learn-dpd.html">
+<div class="wrap">
+<header class="nav" id="nav"></header>
+<div class="pagehead">
+  <p class="kicker"><a href="learn.html">Learn</a></p>
+  <h1>Dissipative particle dynamics</h1>
+  <p>DPD is the method behind most of my thesis work on block copolymer coatings. It is coarse-grained MD with very soft beads and a thermostat that conserves momentum. Because of this, it reaches the length and time scales where polymers self-assemble, while it still keeps hydrodynamics.</p>
+  <ol class="toc" id="toc"></ol>
+</div>
+
+<section class="lesson" id="s1">
+  <div>
+    <h2>Three pairwise forces</h2>
+    <p>Every pair of beads closer than the cutoff r<sub>c</sub> feels three forces along the line between them.</p>
+<ul><li>The <b>conservative</b> force is a soft repulsion, a<sub>ij</sub>(1 &minus; r/r<sub>c</sub>), and the size of a<sub>ij</sub> sets the chemistry.</li>
+<li>The <b>dissipative</b> force is a friction on the relative velocity, &minus;&gamma; w<sub>D</sub>(r)(e&middot;v<sub>ij</sub>).</li>
+<li>The <b>random</b> force is a kick, &sigma; w<sub>R</sub>(r) &xi;<sub>ij</sub> / &radic;dt.</li></ul>
+<div class="eq">w<sub>D</sub> = w<sub>R</sub><sup>2</sup>,   &sigma;<sup>2</sup> = 2&gamma;kT   (fluctuation-dissipation)</div>
+<p>Because the energy stays finite even when beads overlap, DPD can use a time step around 0.03 to 0.05 in reduced units, far larger than with LJ.</p>
+  </div>
+  <figure data-demo="dpd-forces" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s2">
+  <div>
+    <h2>What one bead means</h2>
+    <p>In DPD, a water bead usually contains N<sub>m</sub> water molecules. With the standard density of &rho; = 3 beads per r<sub>c</sub><sup>3</sup>, this sets the real cutoff length, and matching the compressibility of water sets the repulsion between like beads.</p>
+<div class="eq">r<sub>c</sub> = 3.107 (&rho; N<sub>m</sub>)<sup>1/3</sup> &Aring;<br>a<sub>ii</sub> &asymp; (16 N<sub>m</sub> &minus; 1) / (0.2 &rho;) kT   (a = 25 for N<sub>m</sub> = 1)</div>
+<p class="try">Try: three water molecules per bead give an r<sub>c</sub> close to 6.5 &Aring;, which is a common choice.</p>
+  </div>
+  <figure data-demo="dpd-units" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s3">
+  <div>
+    <h2>From &chi; to a<sub>ij</sub></h2>
+    <p>Groot and Warren showed that the excess repulsion between unlike beads maps onto the Flory-Huggins &chi; parameter. This is how chemistry enters a DPD model. The &chi; parameter can come from experiments, solubility parameters, or all-atom simulations, and <a href="projects.html#n13">project 13</a> learns it from MD.</p>
+<div class="eq">a<sub>ij</sub> = a<sub>ii</sub> + 3.27 &chi;<sub>ij</sub>   at &rho; = 3</div>
+<p class="try">Try: below a &chi; of about 2, the single beads stay mixed, and above it, they demix. For polymers, the threshold is &chi;N, so long chains separate at a much smaller &chi;.</p>
+  </div>
+  <figure data-demo="dpd-chi" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s4">
+  <div>
+    <h2>Why momentum conservation matters</h2>
+    <p>The DPD friction acts between pairs, so momentum is exchanged but never lost. A flow decays slowly through viscosity, as in a real liquid. In contrast, a Langevin thermostat drags every bead against a fixed background, so flows die almost at once, and hydrodynamics is lost.</p>
+<p>For self-assembly and phase separation, this changes the speed and even the path of structure formation.</p>
+<p class="try">Try: compare the decay of the flow and the total momentum with DPD and with Langevin.</p>
+  </div>
+  <figure data-demo="dpd-momentum" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s5">
+  <div>
+    <h2>Block copolymers form domains</h2>
+    <p>If you bond A and B beads into chains, the system cannot separate fully. Instead, it forms stripes (lamellae), cylinders, or spheres, depending on the block ratio and on &chi;N. This is called microphase separation.</p>
+<p class="try">Try: change the number of A beads per chain to make the blocks unequal.</p>
+  </div>
+  <figure data-demo="dpd" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s6">
+  <div>
+    <h2>A coating that assembles itself</h2>
+    <p>This is the system from my thesis, simplified to 2D. Amphiphilic di-block copolymers in water sit above a hydrophilic surface, such as cellulose or starch. As the water evaporates, the hydrophilic blocks attach to the substrate, and the hydrophobic blocks form a layer above them.</p>
+<p>In 3D and with more realistic parameters, this process decides whether the coating is continuous or full of defects, and therefore how well it blocks water.</p>
+<p class="try">Try: change the hydrophobic block length, and stop the evaporation to compare a wet and a dry film.</p>
+  </div>
+  <figure data-demo="coating" data-text="off"></figure>
+</section>
+
+<nav class="pager" id="pager"></nav>
+<footer id="footer"></footer>
+</div>
+<script src="data.js"></script>
+<script src="demos/core.js"></script>
+<script src="learn/common.js"></script>
+<script src="learn/dpd.js"></script>
+<script src="demos/dpd.js"></script>
+<script src="demos/coating.js"></script>
+<script src="site.js"></script>
+</body>
+</html>

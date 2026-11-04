@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Diffusion · Kourosh Hasheminejad</title>
+<meta name="description" content="Diffusion from random walks to measured diffusion coefficients and ions in a field.">
+<meta name="theme-color" content="#d5d8dc" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kourosh Hasheminejad">
+<meta property="og:title" content="Diffusion · Kourosh Hasheminejad">
+<meta property="og:description" content="Diffusion from random walks to measured diffusion coefficients and ions in a field.">
+<meta property="og:url" content="https://kourosh-h.github.io/learn-diffusion.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230c0e10'/%3E%3Cpath d='M8 23L16 16L24 9' stroke='%23959ea8' stroke-width='2.4'/%3E%3Ccircle cx='8' cy='23' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='16' cy='16' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='24' cy='9' r='4.8' fill='%23efa458'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Gloock&family=Spline+Sans+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-learn="learn-diffusion.html">
+<div class="wrap">
+<header class="nav" id="nav"></header>
+<div class="pagehead">
+  <p class="kicker"><a href="learn.html">Learn</a></p>
+  <h1>Diffusion</h1>
+  <p>Diffusion is what random motion looks like on average. This page shows how the random walk of single particles turns into Fick's law, how to get a reliable diffusion coefficient out of a simulation, and how ions move when you switch on an electric field.</p>
+  <ol class="toc" id="toc"></ol>
+</div>
+
+<section class="lesson" id="s1">
+  <div>
+    <h2>From random walks to Fick's law</h2>
+    <p>Each particle takes random steps. No single path is predictable, but the cloud spreads in a very predictable way. The concentration profile is a Gaussian, and its width grows with the square root of time. This is the solution of Fick's second law for particles that start in one place.</p>
+<div class="eq">&part;c/&part;t = D &part;<sup>2</sup>c/&part;x<sup>2</sup><br>c(x, t) = exp(&minus;x<sup>2</sup>/4Dt) / &radic;(4&pi;Dt),   &lang;x<sup>2</sup>&rang; = 2Dt</div>
+<p class="try">Try: double D, and the cloud spreads to the same width in half the time.</p>
+  </div>
+  <figure data-demo="df-walk" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s2">
+  <div>
+    <h2>Calculating D from the MSD</h2>
+    <p>The Einstein relation says that the MSD becomes a straight line at long times, and the slope gives D. In practice, there are three things to get right.</p>
+<p>First, average over time origins, not only over particles. Every frame can be a new starting point, which gives far more statistics for short lags. Second, fit only the linear part. At short times, the motion is still ballistic (MSD ~ t<sup>2</sup>), and including it biases D. Third, do not fit the longest lags, because they have few independent origins and are noisy.</p>
+<div class="eq">MSD(t) = &lang;|r(t<sub>0</sub> + t) &minus; r(t<sub>0</sub>)|<sup>2</sup>&rang;<sub>i, t<sub>0</sub></sub> &rarr; 2d D t<br>D = slope / 4 in 2D, slope / 6 in 3D</div>
+<p>In periodic MD, also remember that D depends on the box size (a known 1/L correction from hydrodynamics), and always use unwrapped coordinates.</p>
+<p class="try">Try: set the fit window to start at 0, and see D come out too low. Then, use only 5 particles and watch the fitted value jump around between resets.</p>
+  </div>
+  <figure data-demo="df-fit" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s3">
+  <div>
+    <h2>Ion diffusion and conductivity</h2>
+    <p>Ions diffuse like any other particle, but they also respond to an electric field. For a single ion, the drift velocity follows from D through the Einstein relation for mobility, so diffusion and conductivity are two views of the same motion.</p>
+<div class="eq">v = &mu; q E,   &mu; = D / kT<br>Nernst-Einstein: &sigma; = (n<sub>+</sub> q<sub>+</sub><sup>2</sup> D<sub>+</sub> + n<sub>&minus;</sub> q<sub>&minus;</sub><sup>2</sup> D<sub>&minus;</sub>) / kT</div>
+<p>In a real electrolyte, cations and anions attract each other and form short-lived pairs. A neutral pair does not carry current, so the measured conductivity is lower than the Nernst-Einstein estimate made from the individual D values. Comparing the two is a standard way to measure ion pairing in simulations of salts and ionic liquids.</p>
+<p class="try">Try: with a Coulomb strength of 0, the dots sit on the dashed ideal lines. If you increase it, ion pairing pulls the drift below the ideal value.</p>
+  </div>
+  <figure data-demo="df-ions" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s4">
+  <div>
+    <h2>Many walkers at once</h2>
+    <p>This is the same idea in 2D, with a straight-line fit through the origin. Real analysis tools, such as MDAnalysis and gmx msd, do exactly this, with time-origin averaging and a fit window that you choose.</p>
+  </div>
+  <figure data-demo="brownian" data-text="off"></figure>
+</section>
+
+<nav class="pager" id="pager"></nav>
+<footer id="footer"></footer>
+</div>
+<script src="data.js"></script>
+<script src="demos/core.js"></script>
+<script src="learn/common.js"></script>
+<script src="learn/diffusion.js"></script>
+<script src="demos/brownian.js"></script>
+<script src="site.js"></script>
+</body>
+</html>

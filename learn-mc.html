@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Monte Carlo · Kourosh Hasheminejad</title>
+<meta name="description" content="Metropolis Monte Carlo, phase transitions, and chemical potentials, with live examples.">
+<meta name="theme-color" content="#d5d8dc" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kourosh Hasheminejad">
+<meta property="og:title" content="Monte Carlo · Kourosh Hasheminejad">
+<meta property="og:description" content="Metropolis Monte Carlo, phase transitions, and chemical potentials, with live examples.">
+<meta property="og:url" content="https://kourosh-h.github.io/learn-mc.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230c0e10'/%3E%3Cpath d='M8 23L16 16L24 9' stroke='%23959ea8' stroke-width='2.4'/%3E%3Ccircle cx='8' cy='23' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='16' cy='16' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='24' cy='9' r='4.8' fill='%23efa458'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Gloock&family=Spline+Sans+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-learn="learn-mc.html">
+<div class="wrap">
+<header class="nav" id="nav"></header>
+<div class="pagehead">
+  <p class="kicker"><a href="learn.html">Learn</a></p>
+  <h1>Monte Carlo</h1>
+  <p>Molecular dynamics is one way to sample the Boltzmann distribution. Monte Carlo is the other way. Instead of following the forces, it makes random moves and accepts them with the right probability. It has no time, but it can make moves that no trajectory could make.</p>
+  <ol class="toc" id="toc"></ol>
+</div>
+
+<section class="lesson" id="s1">
+  <div>
+    <h2>The Metropolis rule</h2>
+    <p>Propose a random change. If the energy goes down, accept it. If it goes up by &Delta;U, accept it with probability e<sup>&minus;&Delta;U/kT</sup>. That is all. The resulting chain of states follows the Boltzmann distribution exactly, because the rule satisfies detailed balance.</p>
+<div class="eq">P<sub>acc</sub>(old &rarr; new) = min(1, e<sup>&minus;(U<sub>new</sub> &minus; U<sub>old</sub>)/kT</sup>)</div>
+<p>The step size is the only tuning knob. If it is too small, nearly every move is accepted, but the walker barely moves. If it is too large, nearly every move is rejected. What matters is not the acceptance rate but how many independent samples you get, which the autocorrelation time &tau; measures.</p>
+<p class="try">Try: compare &delta; = 0.05, 1.5, and 5. Both extremes give a long &tau;. The best value here is around 1.5, with an acceptance rate well below 50%.</p>
+  </div>
+  <figure data-demo="mc-metropolis" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s2">
+  <div>
+    <h2>Same ensemble, different route</h2>
+    <p>MD at constant temperature and Metropolis MC sample the same canonical ensemble, so all static averages must agree, such as energies, g(r), and densities. Dynamic quantities, such as diffusion coefficients, exist only in MD.</p>
+<p>MC wins when there are clever moves that MD cannot make, for example swapping two particles, regrowing a polymer chain, inserting a molecule, or flipping a spin. MD wins for dense, complex systems where good moves are hard to design, and it runs efficiently in parallel.</p>
+<p class="try">Try: wait for the two averages to settle. They agree to about 1%, and the rest is statistical noise and the finite MD time step, although the two boxes never look alike frame by frame.</p>
+  </div>
+  <figure data-demo="mc-vs-md" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s3">
+  <div>
+    <h2>Phase transitions and the Ising model</h2>
+    <p>The Ising model has spins that point up or down on a lattice, and each spin prefers to align with its neighbors. Below the critical temperature, T<sub>c</sub> = 2.269, one direction wins, and above it, the order melts. The Ising model is the standard example of a phase transition, and it maps directly onto lattice gases and binary mixtures.</p>
+<p>Near T<sub>c</sub>, the domains come in all sizes and the fluctuations are huge, so the heat capacity and susceptibility peak. Single spin flips also become very slow there (critical slowing down), which is why cluster algorithms such as Wolff were invented. Finite boxes round off the transition, so the true T<sub>c</sub> comes from comparing several box sizes.</p>
+<p class="try">Try: T = 2.0, 2.27, and 2.6. At 2.27, the pattern never settles. Drag on the lattice to paint an island, and see whether it survives.</p>
+  </div>
+  <figure data-demo="ising" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s4">
+  <div>
+    <h2>Chemical potential by insertion</h2>
+    <p>The chemical potential tells you how much a system wants another molecule. It decides solubility, partitioning between phases, and adsorption. Widom's method measures it by inserting a ghost particle at random and averaging its Boltzmann factor, without ever really adding the particle.</p>
+<div class="eq">&mu;<sub>ex</sub> = &minus;kT ln &lt;e<sup>&minus;&Delta;U/kT</sup>&gt;</div>
+<p>It works well for small molecules in fluids that are not too dense. In a dense liquid, almost every insertion overlaps with a particle, and the average is decided by the rare lucky ones. Then, the estimate converges slowly, and it is better to use free energy perturbation in steps or thermodynamic integration instead.</p>
+<p class="try">Try: at density 0.1, the estimate converges almost at once. At 0.7, only a tiny fraction of the ghosts fit, and the running value jumps around for a long time.</p>
+  </div>
+  <figure data-demo="mc-widom" data-text="off"></figure>
+</section>
+
+<nav class="pager" id="pager"></nav>
+<footer id="footer"></footer>
+</div>
+<script src="data.js"></script>
+<script src="demos/core.js"></script>
+<script src="learn/common.js"></script>
+<script src="learn/mc.js"></script>
+<script src="demos/ising.js"></script>
+<script src="site.js"></script>
+</body>
+</html>

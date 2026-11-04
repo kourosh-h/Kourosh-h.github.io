@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Proteins and biomolecules · Kourosh Hasheminejad</title>
+<meta name="description" content="Protein folding, melting, membranes, and enzymes from a simulation point of view, with live examples.">
+<meta name="theme-color" content="#d5d8dc" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kourosh Hasheminejad">
+<meta property="og:title" content="Proteins and biomolecules · Kourosh Hasheminejad">
+<meta property="og:description" content="Protein folding, melting, membranes, and enzymes from a simulation point of view, with live examples.">
+<meta property="og:url" content="https://kourosh-h.github.io/learn-bio.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230c0e10'/%3E%3Cpath d='M8 23L16 16L24 9' stroke='%23959ea8' stroke-width='2.4'/%3E%3Ccircle cx='8' cy='23' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='16' cy='16' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='24' cy='9' r='4.8' fill='%23efa458'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Gloock&family=Spline+Sans+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-learn="learn-bio.html">
+<div class="wrap">
+<header class="nav" id="nav"></header>
+<div class="pagehead">
+  <p class="kicker"><a href="learn.html">Learn</a></p>
+  <h1>Proteins and biomolecules</h1>
+  <p>Biomolecules follow the same physics as any other soft matter, but evolution has tuned the details. A few simple models capture the essentials, which are why proteins fold, why folding is cooperative, why lipids form membranes, and how enzymes set reaction rates.</p>
+  <ol class="toc" id="toc"></ol>
+</div>
+
+<section class="lesson" id="s1">
+  <div>
+    <h2>Why proteins fold</h2>
+    <p>A protein of 100 residues has more conformations than could be searched in the age of the universe (Levinthal's paradox), yet it folds in milliseconds. The answer is a funnel-shaped energy landscape. Most moves that bury hydrophobic groups go downhill, so folding does not need a random search.</p>
+<p>The HP lattice model keeps only this one driving force, which is that hydrophobic residues avoid water. The model is crude, but it shows a hydrophobic core, a unique ground state for good sequences, and trapping in misfolded states at low temperature.</p>
+<p class="try">Try: at T = 0.3, the chain usually reaches E = &minus;8 or &minus;9, with the orange H beads inside. At T = 1.5, it stays unfolded. A very low T can trap the chain, so reset at T = 0.15 and compare.</p>
+  </div>
+  <figure data-demo="bio-hp" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s2">
+  <div>
+    <h2>Melting curves and cooperativity</h2>
+    <p>When proteins and DNA are heated, they unfold over a narrow temperature range, which is much sharper than independent units would give. The reason is cooperativity. A partly folded state pays for every boundary between folded and unfolded parts, so the molecules prefer to be either fully folded or fully unfolded.</p>
+<p>This helix-coil model (Zimm-Bragg) has one free energy per unit and one cost J per boundary. With J = 0, each unit melts on its own, and the curve is broad. With a large J, whole chains switch together, which is the two-state behavior seen for many small proteins. Measured melting curves from calorimetry or circular dichroism are fitted with exactly this kind of model.</p>
+<p class="try">Try: J = 0 and then J = 3, and compare the width of the transition. The picture shows whole rows switching at a high J.</p>
+  </div>
+  <figure data-demo="bio-melt" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s3">
+  <div>
+    <h2>Lipids and membranes</h2>
+    <p>Lipids have a water-loving head and oily tails. In water, the tails hide by forming bilayers, which are the basis of every cell membrane, or micelles when the head is large compared with the tails. No bonds hold a membrane together, only this hydrophobic effect, and this is why membranes are fluid and can heal.</p>
+<p>Coarse-grained models, such as Martini or DPD, are the usual way to simulate membranes and their proteins, because the processes of interest (self-assembly, fusion, pore formation, and drug permeation) are too slow and too large for all-atom MD.</p>
+<p class="try">Try: start with a tail-water repulsion of 25, where nothing happens. Then, raise it to 80 and reset. Sheets and micelles form within a few hundred time units.</p>
+  </div>
+  <figure data-demo="bio-bilayer" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s4">
+  <div>
+    <h2>Enzyme kinetics</h2>
+    <p>An enzyme binds its substrate, converts it, and releases the product. At a low substrate concentration, the rate grows linearly, and at a high concentration, every enzyme is busy, and the rate saturates at V<sub>max</sub>. The Michaelis constant K<sub>m</sub> is the concentration at half of the maximum rate.</p>
+<div class="eq">E + S &#8652; ES &rarr; E + P     v = V<sub>max</sub>[S] / (K<sub>m</sub> + [S])</div>
+<p>A competitive inhibitor competes for the same site. It raises the apparent K<sub>m</sub> but leaves V<sub>max</sub> unchanged, because enough substrate still wins. Many drugs work in this way, which links back to the binding constants on the <a href="learn-discovery.html">drug discovery</a> page.</p>
+<p class="try">Try: measure at a few substrate levels to trace the curve. Then, add the inhibitor and repeat. The points follow the shifted curve and still approach the same V<sub>max</sub>.</p>
+  </div>
+  <figure data-demo="bio-enzyme" data-text="off"></figure>
+</section>
+
+<nav class="pager" id="pager"></nav>
+<footer id="footer"></footer>
+</div>
+<script src="data.js"></script>
+<script src="demos/core.js"></script>
+<script src="learn/common.js"></script>
+<script src="learn/bio.js"></script>
+<script src="site.js"></script>
+</body>
+</html>

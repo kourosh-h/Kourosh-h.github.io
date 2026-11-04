@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Analyzing trajectories · Kourosh Hasheminejad</title>
+<meta name="description" content="How common MD analysis quantities are computed, with live examples.">
+<meta name="theme-color" content="#d5d8dc" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kourosh Hasheminejad">
+<meta property="og:title" content="Analyzing trajectories · Kourosh Hasheminejad">
+<meta property="og:description" content="How common MD analysis quantities are computed, with live examples.">
+<meta property="og:url" content="https://kourosh-h.github.io/learn-analysis.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230c0e10'/%3E%3Cpath d='M8 23L16 16L24 9' stroke='%23959ea8' stroke-width='2.4'/%3E%3Ccircle cx='8' cy='23' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='16' cy='16' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='24' cy='9' r='4.8' fill='%23efa458'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Gloock&family=Spline+Sans+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-learn="learn-analysis.html">
+<div class="wrap">
+<header class="nav" id="nav"></header>
+<div class="pagehead">
+  <p class="kicker"><a href="learn.html">Learn</a></p>
+  <h1>Analyzing trajectories</h1>
+  <p>A trajectory is just a list of positions over time. Everything that we report from a simulation comes from counting and averaging these positions in a careful way. This page shows how the usual quantities are computed in practice.</p>
+  <ol class="toc" id="toc"></ol>
+</div>
+
+<section class="lesson" id="s1">
+  <div>
+    <h2>Radial distribution function g(r)</h2>
+    <p>g(r) tells you how likely you are to find a particle at distance r from another one, compared with an ideal gas at the same density. The peaks are the neighbor shells, and g goes to 1 far away.</p>
+<p>To compute it, loop over all pairs, put each distance into a histogram bin of width dr, average over frames, and divide by what an ideal gas would give in that shell.</p>
+<div class="eq">g(r) = n(r) / (N &rho; &middot; 2&pi;r dr)   in 2D<br>g(r) = n(r) / (N &rho; &middot; 4&pi;r<sup>2</sup> dr)   in 3D</div>
+<p class="try">Try: lower T to see sharper shells as the liquid gets more structured, or heat it up toward a gas.</p>
+  </div>
+  <figure data-demo="an-rdf" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s2">
+  <div>
+    <h2>Mean squared displacement and diffusion</h2>
+    <p>The MSD is the average of |r(t) &minus; r(0)|<sup>2</sup> over particles (and over time origins in a real analysis). At very short times, particles fly freely, and the MSD grows as t<sup>2</sup>. After collisions randomize the direction, it grows linearly, and the slope gives the diffusion coefficient.</p>
+<div class="eq">MSD(t) = 2d D t   for long t, d = number of dimensions<br>D = slope / 4 in 2D, slope / 6 in 3D</div>
+<p>Always fit D only in the linear part. On a log-log plot, this is where the slope is 1.</p>
+<p class="try">Try: change the friction and watch where the crossover from slope 2 to slope 1 moves.</p>
+  </div>
+  <figure data-demo="an-msd" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s3">
+  <div>
+    <h2>Density profiles near a surface</h2>
+    <p>Near a wall, liquids form layers. To see them, cut the box into thin slabs parallel to the surface, count particles in each slab over many frames, and divide by the slab volume. The same recipe gives the water density above a silica surface, or the composition across a polymer film.</p>
+<div class="eq">&rho;(z) = &lang; N in [z, z + dz] &rang; / (A dz)</div>
+<p class="try">Try: increase the wall attraction for a sharper first layer, or raise T to wash the layers out.</p>
+  </div>
+  <figure data-demo="an-density" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s4">
+  <div>
+    <h2>Structure next to a surface</h2>
+    <p>If you put a solid slab in the middle of a periodic box, the liquid has two very different regions. One is the layers that touch the surface, and the other is the liquid far away, which looks like the bulk. You analyze them separately.</p>
+<p>The density profile is now measured as a function of the distance z from the surface, adding both sides of the slab. For g(r), you pick the reference particles by region. Inside the first layer, you only count neighbors in the same layer, and the ideal gas reference is that of the layer itself (a line here, and a plane in 3D). Far from the surface, you use the normal bulk g(r).</p>
+<div class="eq">layer, 2D box: g(r) = n(r) / (N<sub>layer</sub> &lambda; &middot; 2 dr)   with &lambda; = particles per length<br>layer, 3D box: g(r) = n(r) / (N<sub>layer</sub> &sigma;<sub>A</sub> &middot; 2&pi;r dr)   with &sigma;<sub>A</sub> = particles per area</div>
+<p>The layer g(r) has sharper and longer-ranged peaks, because the surface squeezes the particles into an almost crystal-like order, while the far g(r) matches the free liquid.</p>
+<p class="try">Try: push the surface attraction up, and watch the first density peak grow and the layer g(r) become solid-like. If you lower it, the two g(r) curves get closer.</p>
+  </div>
+  <figure data-demo="an-wall-rdf" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s5">
+  <div>
+    <h2>Diffusion along and across a surface</h2>
+    <p>Near a surface, the MSD has to be split by direction. Along the surface (lateral), particles can still diffuse, often more slowly because the surface holds them. Across the surface (normal), they are blocked, so the normal MSD flattens out instead of growing forever.</p>
+<p>Group the particles by where they are at each time origin, and then average the x and y displacements separately. In 3D, the lateral part has two directions, so D = slope / 4 for the lateral MSD, and slope / 2 for one direction, as here.</p>
+<div class="eq">MSD<sub>x</sub>(t) = &lang;(x(t<sub>0</sub>+t) &minus; x(t<sub>0</sub>))<sup>2</sup>&rang;<sub>group, t<sub>0</sub></sub> &rarr; 2 D<sub>&#8741;</sub> t</div>
+<p>There are two practical points. First, use unwrapped coordinates, because otherwise a jump across the periodic boundary looks like a huge step. Second, particles leave the layer over time, so for long lags, the "layer" curve slowly turns into a bulk curve. Better analyses use survival probabilities for this, but the idea is the same.</p>
+<p class="try">Try: compare the solid orange and blue curves to see the lateral slowdown at the surface. Then, raise the attraction and see the gap grow. The dashed orange line shows the confinement in z.</p>
+  </div>
+  <figure data-demo="an-wall-msd" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s6">
+  <div>
+    <h2>Hydration shell and coordination number</h2>
+    <p>The RDF between a solute and the solvent tells you how the solvent packs around it. The first peak is the first solvation shell, and the first minimum after it is its outer edge. For water around an ion, this is the hydration shell.</p>
+<p>If you integrate the RDF up to that minimum, you get the coordination number, which is the average number of solvent molecules in the first shell.</p>
+<div class="eq">n(r) = &rho; &int;<sub>0</sub><sup>r</sup> g(r') 2&pi;r' dr'   in 2D,   4&pi;r'<sup>2</sup> in 3D<br>coordination number = n(r<sub>min</sub>)</div>
+<p>For Na<sup>+</sup> in water this gives about 5 to 6, and for Cl<sup>&minus;</sup>, about 6 to 7. The same recipe works for water around a silica surface group or around a polymer bead.</p>
+<p class="try">Try: grow the solute, and the shell holds more neighbors. Raise the attraction, and the first peak gets taller and sharper, which is what a strongly hydrated ion looks like.</p>
+  </div>
+  <figure data-demo="an-hydration" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s7">
+  <div>
+    <h2>Hydrogen bonds in water</h2>
+    <p>In most force fields, a hydrogen bond is not a separate force, but it emerges from the charges and the LJ interactions. Analysis tools count a hydrogen bond with a geometric rule. In a common rule, the oxygen-oxygen distance is below 3.5 &Aring;, and the angle between the donor O-H bond and the donor-acceptor O&middot;&middot;&middot;O line is below 30&deg;.</p>
+<p>From this rule, you get the number of hydrogen bonds per molecule, their lifetimes (how long a pair stays bonded), and how a surface changes the water network. This last point is what my analysis of surface water looks at.</p>
+<p class="try">Try: drag the second molecule and turn it. Then, change the cutoffs and see how much the count depends on the definition.</p>
+  </div>
+  <figure data-demo="an-hbond" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s8">
+  <div>
+    <h2>How big is a polymer chain?</h2>
+    <p>There are two standard measures, which are the end-to-end distance R<sub>ee</sub> and the radius of gyration R<sub>g</sub> (the RMS distance of the monomers from the center of the chain). Both grow as a power of the chain length N.</p>
+<div class="eq">R ~ N<sup>&nu;</sup><br>&nu; = 1/2 ideal chain (random walk, theta solvent)<br>&nu; = 3/4 self-avoiding in 2D, about 0.588 in 3D (good solvent)</div>
+<p>Fitting log R against log N gives &nu;, which tells you the solvent quality.</p>
+<p class="try">Try: switch between ideal and self-avoiding walks and watch the fitted exponent move.</p>
+  </div>
+  <figure data-demo="an-chain" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s9">
+  <div>
+    <h2>Order parameters</h2>
+    <p>An order parameter is a single number that is zero in the disordered phase and nonzero in the ordered one. For rod-like molecules, such as liquid crystals, tilted SAM chains, and stretched polymers, the nematic order parameter measures how well they are aligned, regardless of which end points where.</p>
+<div class="eq">2D: S = | &lang; e<sup>2i&theta;</sup> &rang; |<br>3D: S = &lang; (3cos<sup>2</sup>&theta; &minus; 1)/2 &rang;, &theta; measured from the director</div>
+<p class="try">Try: cool slowly from high T and watch S rise as the domains align. The rods in orange are far from the average direction.</p>
+  </div>
+  <figure data-demo="an-order" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s10">
+  <div>
+    <h2>Is this atom crystal or liquid?</h2>
+    <p>To find out which atoms are in a crystal, describe each atom by a few numbers about its neighbors, and then group similar atoms. Here, the features are the number of neighbors n and the bond-orientational order &psi;<sub>6</sub>, which is 1 for a perfect hexagon. Tools such as OVITO do the same with common neighbor analysis or Steinhardt parameters.</p>
+<div class="eq">&psi;<sub>6</sub> = | (1/n) &Sigma;<sub>j</sub> e<sup>6i&theta;<sub>ij</sub></sup> |</div>
+<p>Then, k-means with two clusters splits the atoms into crystal-like and liquid-like groups. <a href="projects.html#n3">Project 3</a> uses the same idea on MD trajectories of a small peptide.</p>
+<p class="try">Try: raise the hot-side temperature and watch the liquid region grow and its cloud move in the feature plot.</p>
+  </div>
+  <figure data-demo="an-classify" data-text="off"></figure>
+</section>
+
+<nav class="pager" id="pager"></nav>
+<footer id="footer"></footer>
+</div>
+<script src="data.js"></script>
+<script src="demos/core.js"></script>
+<script src="learn/common.js"></script>
+<script src="learn/analysis.js"></script>
+<script src="site.js"></script>
+</body>
+</html>

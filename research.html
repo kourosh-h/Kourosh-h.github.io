@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Research · Kourosh Hasheminejad</title>
+<meta name="description" content="Eight papers on polymer coatings, monolayers on silica, and polymer/graphene interfaces, explained with figures that run in the browser.">
+<meta name="theme-color" content="#d5d8dc" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kourosh Hasheminejad">
+<meta property="og:title" content="Research · Kourosh Hasheminejad">
+<meta property="og:description" content="Eight papers on polymer coatings, monolayers on silica, and polymer/graphene interfaces, explained with figures that run in the browser.">
+<meta property="og:url" content="https://kourosh-h.github.io/research.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230c0e10'/%3E%3Cpath d='M8 23L16 16L24 9' stroke='%23959ea8' stroke-width='2.4'/%3E%3Ccircle cx='8' cy='23' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='16' cy='16' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='24' cy='9' r='4.8' fill='%23efa458'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Gloock&family=Spline+Sans+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+<header class="nav" id="nav"></header>
+
+<div class="pagehead">
+  <p class="kicker">Research</p>
+  <h1>Simulations of coatings and interfaces</h1>
+  <p>Most of my research is about what happens where a polymer or a small molecule meets a surface. For example, this can be a coating on paper, a monolayer on silica, or a polymer that holds on to graphene. I use all-atom molecular dynamics (MD) when the chemistry matters, and coarse-grained models such as dissipative particle dynamics (DPD) when the structure forms over larger length and time scales. Below, you can find my eight papers. For each paper, I explain the question, what we did, what we found, and my part in the work.</p>
+  <ul class="jump">
+    <li><a href="#coatings">coatings</a></li>
+    <li><a href="#monolayers">monolayers</a></li>
+    <li><a href="#composites">polymer and graphene</a></li>
+    <li><a href="#papers">all papers</a></li>
+    <li><a href="#talks-sec">talks</a></li>
+    <li><a href="#code">code</a></li>
+  </ul>
+</div>
+
+<section id="overview">
+  <div class="head"><h2>The papers at a glance</h2><p>the numbers match the map</p></div>
+  <div class="overview">
+    <div>
+      <ol class="papernav">
+        <li class="grp">Coatings on paper-like surfaces</li>
+        <li><span class="ring c">1</span><a href="#p1">How the block ratio shapes a coating</a><span class="y">2023</span></li>
+        <li><span class="ring c">2</span><a href="#p2">When a coating closes and when it cracks</a><span class="y">2023</span></li>
+        <li><span class="ring c">3</span><a href="#p3">Which chemistry keeps water out under strain</a><span class="y">2025</span></li>
+        <li class="grp">Monolayers on silica</li>
+        <li><span class="ring s">4</span><a href="#p4">Short alkylsilane chains, dry and under water</a><span class="y">in review</span></li>
+        <li class="grp">Polymer and graphene</li>
+        <li><span class="ring m">5</span><a href="#p5">Treating graphene so that PLA holds on to it</a><span class="y">2020</span></li>
+        <li><span class="ring m">6</span><a href="#p6">How much grafting is too much</a><span class="y">2021</span></li>
+        <li><span class="ring m">7</span><a href="#p7">Shape memory with graphene, in MD and in the lab</a><span class="y">2020</span></li>
+        <li><span class="ring m">8</span><a href="#p8">Tuning shape memory with surface groups</a><span class="y">2022</span></li>
+      </ol>
+      <p class="note">The figures on this page run in your browser. A few of them are small live simulations with the same kind of model as in the paper, and the rest are drawings and charts made from the published numbers. Each caption says which one it is. None of the figures is copied from a paper.</p>
+    </div>
+    <figure data-demo="rs-map"></figure>
+  </div>
+</section>
+
+<section id="coatings">
+  <div class="head"><h2>Coatings on paper-like surfaces</h2><p>doctoral work, Aalto University</p></div>
+  <p class="intro">Paper and board are made of cellulose and starch, which attract water. For packaging, they need a thin layer that keeps moisture out. Block copolymers can build such a layer on their own, but only if the chains and the recipe are right. In my doctoral work in Maria Sammalkorpi's group, partly together with industry, I studied what "right" means at the molecular level. In papers 1 and 2, we followed the film as it forms, using DPD. In paper 3, we looked at how water gets into the film, using all-atom MD.</p>
+
+  <article class="paper" id="p1">
+    <div>
+      <p class="meta"><span class="ring c">1</span><span>J. Colloid Interface Sci. 640, 809 (2023)</span><span class="oa">open access</span></p>
+      <h3>Controlling self-assembling co-polymer coatings of hydrophilic polysaccharide substrates via co-polymer block length ratio</h3>
+      <p class="au">A. Scacchi, <span class="me">K. Hasheminejad</span>, S. Javan Nikkhah, M. Sammalkorpi</p>
+      <dl class="qa">
+        <dt>Question</dt>
+        <dd>Amphiphilic di-block copolymers have one block that likes water and one that does not. When they settle from water onto a hydrophilic surface such as cellulose, what kind of coating do they make, and how does the length ratio of the two blocks change it?</dd>
+        <dt>What we did</dt>
+        <dd>We used DPD simulations with four kinds of beads, which were a starch-like block (A), a hydrophobic styrene and butyl acrylate block (B), a cellulose substrate, and water. Each chain has seven beads, which is about 35 monomers, with A:B ratios of 6:1, 5:2, and 4:3. The bead repulsions came from Flory-Huggins &chi; parameters that we computed with all-atom MD. The polymer first formed particles in water. Then, we added the substrate and let the coating grow on it, at a series of polymer concentrations.</dd>
+        <dt>What we found</dt>
+        <dd>At low concentrations, all copolymers stick to the surface as small patches. At 11.25%, all three cover the surface, but the inside of the film depends on the block ratio. With 6:1, the hydrophobic beads stay mixed in, and with 5:2, they start to separate. The nearly symmetric 4:3 gives a clean layered film, with a hydrophilic layer on the substrate, a hydrophobic middle layer, and a hydrophilic top layer.</dd>
+        <dt>Why it matters</dt>
+        <dd>The hydrophobic middle layer is the part that keeps water out. The block ratio controls this layer, and it can be chosen before anything is made in the lab.</dd>
+        <dt>My part</dt>
+        <dd>I ran the simulations and did the analysis together with A. Scacchi, and we wrote the first draft together.</dd>
+      </dl>
+      <p class="plinks"><a href="https://doi.org/10.1016/j.jcis.2023.02.117">read the paper</a></p>
+    </div>
+    <div class="figs stick">
+      <figure data-demo="rs-film"></figure>
+    </div>
+  </article>
+
+  <article class="paper" id="p2">
+    <div>
+      <p class="meta"><span class="ring c">2</span><span>Appl. Surf. Sci. 640, 158324 (2023)</span><span class="oa">open access</span></p>
+      <h3>Cracking polymer coatings of paper-like surfaces: Control via block co-polymer structure and system composition</h3>
+      <p class="au"><span class="me">K. Hasheminejad</span>, A. Scacchi, S. Javan Nikkhah, M. Sammalkorpi</p>
+      <dl class="qa">
+        <dt>Question</dt>
+        <dd>Real coating recipes are mixtures, for example of a hydrophobic binder and an amphiphilic polymer that helps it spread. Does the copolymer from paper 1 still give a good film when a hydrophobic polymer is added? And what happens with too little or too much copolymer?</dd>
+        <dt>What we did</dt>
+        <dd>We added a hydrophobic polymer of 19 beads (B<sub>19</sub>) to the same DPD model. First, we changed the block ratio of the copolymer from 6:1 to 1:6 at a fixed recipe. Then, for the 3:4 copolymer, we mapped the coating structure from 9 to 15% copolymer and from 7 to 15% B<sub>19</sub>.</dd>
+        <dt>What we found</dt>
+        <dd>Very asymmetric copolymers leave droplets with B<sub>19</sub> in their core. The balanced 4:3 and 3:4 copolymers give a layered coating with B<sub>19</sub> in the middle. The map has three regions. At 9% copolymer, the coating stays incomplete. At 10 to 11.25%, it is complete, and more B<sub>19</sub> only makes it thicker. From 12.5% on, the extra copolymer pierces the hydrophobic layer with hydrophilic channels, and the coating cracks.</dd>
+        <dt>Why it matters</dt>
+        <dd>The map gives a composition window to aim for in a real recipe. The trend follows the packing shape of the chains, which is either a cone or a cylinder, so the same idea also works for other amphiphiles.</dd>
+        <dt>My part</dt>
+        <dd>I planned the study with A. Scacchi and M. Sammalkorpi, ran the simulations and the analysis, and wrote the first draft with A. Scacchi.</dd>
+      </dl>
+      <p class="plinks"><a href="https://doi.org/10.1016/j.apsusc.2023.158324">read the paper</a></p>
+    </div>
+    <div class="figs">
+      <figure data-demo="rs-ratio"></figure>
+      <figure data-demo="rs-window"></figure>
+    </div>
+  </article>
+
+  <article class="paper" id="p3">
+    <div>
+      <p class="meta"><span class="ring c">3</span><span>Comput. Mater. Sci. 258, 114046 (2025)</span><span class="oa">open access</span></p>
+      <h3>Molecular level dependencies of water permeability in di-block copolymer assemblies</h3>
+      <p class="au"><span class="me">K. Hasheminejad</span>, Y. Morais Jaques, A. Lepo, A. Scacchi, M. Sammalkorpi</p>
+      <dl class="qa">
+        <dt>Question</dt>
+        <dd>In DPD, a bead only knows whether it likes water or not. Which chemical details of the hydrophobic block decide how much water gets into the film, especially when the film is stretched?</dd>
+        <dt>What we did</dt>
+        <dd>We ran all-atom MD (LAMMPS, OPLS-AA, and TIP3P water) of layers of 98 copolymers. Each copolymer had a five-unit starch block and a ten-unit hydrophobic block. We compared four hydrophobic blocks that are used in paper coatings, which were styrene with n-butyl acrylate, styrene with 2-ethylhexyl acrylate, isobutyl methacrylate with n-butyl acrylate, and methyl methacrylate with n-butyl acrylate. Each system ran for 100 ns and was then stretched up to 10% in the plane. We counted the water molecules inside the hydrophobic layer and measured the interface roughness, chain alignment, and chain extension.</dd>
+        <dt>What we found</dt>
+        <dd>Without stretching, the 2-ethylhexyl acrylate and isobutyl methacrylate films let in the least water, with 0.33 and 0.38 molecules per nm&sup2;, compared with 1.2 and 1.3 for the other two. When stretched by 10%, only the styrene and 2-ethylhexyl acrylate film still worked well (0.92 per nm&sup2;). Its chains kept their alignment, and its interface stayed smooth. In contrast, the isobutyl methacrylate film became rough, and its water count rose more than fivefold, to 2.0 per nm&sup2;.</dd>
+        <dt>Why it matters</dt>
+        <dd>The results suggest a recipe for a barrier that survives strain. It needs bulky or branched side groups that fill space, flexible chains that adapt, and side groups that interlock and keep the chains aligned. These trends agree with what is known for styrene-acrylate paper coatings.</dd>
+        <dt>My part</dt>
+        <dd>I developed the idea together with A. Lepo, A. Scacchi, and M. Sammalkorpi. I planned the study, ran the simulations and the analysis, and wrote the first draft.</dd>
+      </dl>
+      <p class="plinks"><a href="https://doi.org/10.1016/j.commatsci.2025.114046">read the paper</a></p>
+    </div>
+    <div class="figs stick">
+      <figure data-demo="rs-water"></figure>
+    </div>
+  </article>
+
+  <div class="thesis" id="thesis">
+    <span class="w">Doctoral thesis, Aalto University, 2026</span>
+    <h3>Computational modelling of block copolymer surface coatings at multiple length scales</h3>
+    <p>The thesis combines papers 1 to 3. Together, they give three design rules for a water barrier made with block copolymers.</p>
+    <ol class="rules">
+      <li><b>Chain shape</b><p>Nearly symmetric di-block copolymers form continuous layered films, while very asymmetric ones leave droplets and patches.</p></li>
+      <li><b>Recipe</b><p>The composition has to be inside the window. Too little copolymer leaves gaps, and too much copolymer breaks the hydrophobic layer. Inside the window, more hydrophobic polymer only makes the film thicker.</p></li>
+      <li><b>Chemistry</b><p>For a barrier that survives stretching, the hydrophobic block should have bulky or branched side groups, a flexible backbone, and side groups that interlock.</p></li>
+    </ol>
+    <p class="lim"><b>Limits.</b> The chains in this work were short, closer to surfactants than to long polymers. In DPD, the beads can pass through each other, and the model has water but no air. MD reaches about a hundred nanoseconds and a few nanometers of film, so it can rank chemistries, but it cannot predict the exact water uptake.</p>
+    <p class="lim"><b>Next steps.</b> In the thesis, I proposed umbrella sampling for the free energy of a water molecule entering the film, a real substrate under the MD film, and many-body DPD so that the film can meet air and give contact angles. I also proposed a hard core in DPD so that chains cannot cross, and passing the MD and DPD results to continuum models for stress and long-time transport.</p>
+    <p class="plinks"><a href="https://urn.fi/URN:ISBN:978-952-64-2955-7">full text</a><a href="https://www.aalto.fi/en/events/public-defence-in-chemistry-msc-kourosh-hasheminejad">public defense</a></p>
+  </div>
+</section>
+
+<section id="monolayers">
+  <div class="head"><h2>Monolayers on silica</h2><p>my newest paper, in review</p></div>
+  <p class="intro">Grafting alkylsilane chains to glass or silicon oxide is one of the simplest ways to change how a surface interacts with water. This paper is in review, so here I show only the question and the methods. I will add the results when the paper is accepted.</p>
+
+  <article class="paper" id="p4">
+    <div>
+      <p class="meta"><span class="ring s">4</span><span>submitted to J. Colloid Interface Sci.</span><span class="status">in review</span></p>
+      <h3>Hydration-enhanced chain length effects in short alkyl chain self-assembled monolayers on silica</h3>
+      <p class="au"><span class="me">K. Hasheminejad</span>, D. Tolmachev, M. Sammalkorpi</p>
+      <dl class="qa">
+        <dt>Question</dt>
+        <dd>Short alkylsilane monolayers, with four to eight carbons, are used to control how glass and silicon oxide surfaces interact with water, but the structures reported for them vary a lot. How do chain length, odd or even length, the number of chains per area, and water on top together shape such a layer?</dd>
+        <dt>What we did</dt>
+        <dd>We ran all-atom MD in GROMACS of chains with four to eight carbons on hydroxylated alpha-quartz, at eleven coverages from 0 to 3.9 chains per nm&sup2;. The top of this range matches the densest layers made in the lab. Every system was run both dry and under water, for 100 ns each, with the INTERFACE force field for silica, CHARMM36 for the chains, and TIP3P water. I built the systems with my own builder, apadana, and took the parameters of the Si-C bond at the grafting point from quantum chemistry.</dd>
+        <dt>What we found</dt>
+        <dd class="held">I will add the findings when the paper is accepted.</dd>
+        <dt>My part</dt>
+        <dd>I developed the concept and the methods, ran the simulations and the analysis, made the figures, and wrote the first draft.</dd>
+      </dl>
+      <p class="plinks"><a href="https://github.com/Kourosh-h/apadana-v4">apadana-v4 (builder)</a><a href="https://github.com/Kourosh-h/Si-C_bond_parameterization_for_CHARMM">Si-C bond parameters</a></p>
+    </div>
+    <div class="figs stick">
+      <figure data-demo="rs-sam"></figure>
+    </div>
+  </article>
+</section>
+
+<section id="composites">
+  <div class="head"><h2>Polymer and graphene</h2><p>M.Sc. work, K. N. Toosi University of Technology</p></div>
+  <p class="intro">My M.Sc. work with Abbas Montazeri was about polylactide (PLA), a polyester made from plant sugars, and graphene. Two of the papers ask how to make the two materials hold together, and the other two ask how graphene changes a PLA that remembers its shape. All four papers use all-atom MD, and in paper 7, the simulations are compared with lab tests.</p>
+
+  <article class="paper" id="p5">
+    <div>
+      <p class="meta"><span class="ring m">5</span><span>Appl. Surf. Sci. 502, 144150 (2020)</span></p>
+      <h3>Enhanced interfacial characteristics in PLA/graphene composites through numerically-designed interface treatment</h3>
+      <p class="au"><span class="me">K. Hasheminejad</span>, A. Montazeri</p>
+      <dl class="qa">
+        <dt>Question</dt>
+        <dd>Graphene can make PLA stiffer and stronger, but only if the load passes across the interface. Which treatment of the graphene surface makes this interface the strongest?</dd>
+        <dt>What we did</dt>
+        <dd>We ran MD pull-out tests in LAMMPS, in which a graphene sheet is pulled out of PLA. The sheet was either bare, carried hydroxyl, carboxyl, methyl, or amine groups, or had PLA chains grafted to it at five densities. We first checked the PLA model against its measured density, glass transition, and stiffness.</dd>
+        <dt>What we found</dt>
+        <dd>Bare graphene gives an interfacial shear strength of about 110 MPa. Carboxyl groups at 5% coverage raise it about fivefold (+405%). Grafted PLA chains at the best density, 0.0072 per &Aring;&sup2;, do slightly better (+410%), and they raise the fracture toughness by 271%. Above this density, there is no further gain. In contrast, more hydroxyl groups help steadily up to 10% coverage.</dd>
+        <dt>Why it matters</dt>
+        <dd>The simulations rank the treatments before anything is synthesized. Grafting chains of the matrix polymer itself comes out on top.</dd>
+        <dt>My part</dt>
+        <dd>This paper came from my M.Sc. work, supervised by A. Montazeri, and I am the first author.</dd>
+      </dl>
+      <p class="plinks"><a href="https://doi.org/10.1016/j.apsusc.2019.144150">read the paper</a></p>
+    </div>
+    <div class="figs stick">
+      <figure data-demo="rs-pullout"></figure>
+    </div>
+  </article>
+
+  <article class="paper" id="p6">
+    <div>
+      <p class="meta"><span class="ring m">6</span><span>Eur. Polym. J. 148, 110351 (2021)</span></p>
+      <h3>Tailoring adhesion characteristics of poly(L-lactic acid)/graphene nanocomposites by end-grafted polymer chains: An atomic-level study</h3>
+      <p class="au"><span class="me">K. Hasheminejad</span>, A. Montazeri, H. Hasheminejad</p>
+      <dl class="qa">
+        <dt>Question</dt>
+        <dd>A pull-out test shears the interface. However, the polymer is often pulled straight off the filler instead. How does grafting change this, and how much grafting is best?</dd>
+        <dt>What we did</dt>
+        <dd>We ran MD pull-off tests of poly(L-lactic acid) (PLLA) on graphene with end-grafted PLLA chains of six monomers, at 0.002 to 0.008 chains per &Aring;&sup2;. At 0.004 chains per &Aring;&sup2;, we also compared chains standing up (a brush) with chains lying flat (a mushroom), and we tested chains of 3 and 12 monomers.</dd>
+        <dt>What we found</dt>
+        <dd>Light grafting works best. At 0.002 chains per &Aring;&sup2;, the normal strength rises from 421.5 to 484.8 MPa, and the interaction energy rises by 14%. Here, the polymer tears before the interface lets go. From 0.006 on, the interface itself becomes the weak spot. The work of adhesion falls by about 40%, and the sheet comes off cleanly. A brush beat a mushroom by 90%, but a very dense brush (0.016) was 58% worse than bare graphene. Both shorter and longer chains beat the 6-mers, but for different reasons. Short chains let the sheet touch the polymer, and long chains entangle further out.</dd>
+        <dt>Why it matters</dt>
+        <dd>More grafting is not always better. There is an optimum, and the place where the sample breaks shows which side of the optimum you are on.</dd>
+        <dt>My part</dt>
+        <dd>I did the concept, methods, simulations, analysis, and figures, and I wrote the first draft.</dd>
+      </dl>
+      <p class="plinks"><a href="https://doi.org/10.1016/j.eurpolymj.2021.110351">read the paper</a></p>
+    </div>
+    <div class="figs stick">
+      <figure data-demo="rs-pulloff"></figure>
+    </div>
+  </article>
+
+  <article class="paper" id="p7">
+    <div>
+      <p class="meta"><span class="ring m">7</span><span>Composites Part A 138, 106055 (2020)</span></p>
+      <h3>Experimentally guided MD simulation to enhance the shape memory behavior of polymer-based nanocomposites: Towards elaborating the underlying mechanism</h3>
+      <p class="au">M. Amini, <span class="me">K. Hasheminejad</span>, A. Montazeri</p>
+      <dl class="qa">
+        <dt>Question</dt>
+        <dd>A shape memory polymer can be stretched when warm, fixed in that shape by cooling, and later spring back when heated. Graphene changes how well PDLLA, a form of PLA, does this. Why does this happen, and can MD reproduce what is measured in the lab?</dd>
+        <dt>What we did</dt>
+        <dd>We measured the same shape memory cycle in the lab, with dynamic mechanical analysis, and ran it in MD, for PDLLA with 0 to 5 wt% graphene. In MD, we also made samples where the sheets clump together.</dd>
+        <dt>What we found</dt>
+        <dd>The MD matches the measured shape fixity within two percentage points at every loading (92 to 100%). It also follows the measured drop in recovery, from about 80% at 1 wt% to 50 to 60% at 3 and 5 wt%. Clumped sheets lower the recovery further, to 40 and 32%. The recovery is driven by the entropy of the polymer chains, and the sheets get in their way.</dd>
+        <dt>Why it matters</dt>
+        <dd>A model that is checked against the lab can explain the mechanism and screen fillers before they are made. Paper 8 builds on this model.</dd>
+        <dt>My part</dt>
+        <dd>Together with M. Amini, I worked on the methods, simulations, validation, analysis, and figures, and we wrote the first draft.</dd>
+      </dl>
+      <p class="plinks"><a href="https://doi.org/10.1016/j.compositesa.2020.106055">read the paper</a></p>
+    </div>
+    <div class="figs">
+      <figure data-demo="rs-shape"></figure>
+      <figure data-demo="rs-sm2020"></figure>
+    </div>
+  </article>
+
+  <article class="paper" id="p8">
+    <div>
+      <p class="meta"><span class="ring m">8</span><span>Smart Mater. Struct. 31, 025010 (2022)</span></p>
+      <h3>Engineering the shape memory parameters of graphene/polymer nanocomposites through atomistic simulations: On the effect of nanofiller surface treatment</h3>
+      <p class="au">M. Amini, <span class="me">K. Hasheminejad</span>, A. Montazeri</p>
+      <dl class="qa">
+        <dt>Question</dt>
+        <dd>If graphene lowers the recovery, can a treatment of its surface bring the recovery back, or tune it on purpose?</dd>
+        <dt>What we did</dt>
+        <dd>We ran the MD cycle from paper 7 for PDLLA with 1 wt% graphene. The graphene carried hydroxyl, methyl, or amine groups, or PDLLA chains grafted at three densities.</dd>
+        <dt>What we found</dt>
+        <dd>Every treatment raises the fixity, from 93% up to 100%. However, only hydroxyl groups also keep the recovery high (84%). Methyl and amine groups lower it to 72 and 69%, and dense grafting lowers it to 39%. The grafted sample also takes almost four times longer to recover the same strain.</dd>
+        <dt>Why it matters</dt>
+        <dd>The surface treatment can tune the material between one that holds its new shape and one that springs back.</dd>
+        <dt>My part</dt>
+        <dd>I am the second author, and this work builds on the model from paper 7.</dd>
+      </dl>
+      <p class="plinks"><a href="https://doi.org/10.1088/1361-665X/ac4194">read the paper</a></p>
+    </div>
+    <div class="figs stick">
+      <figure data-demo="rs-sm2022"></figure>
+    </div>
+  </article>
+</section>
+
+<section id="papers">
+  <div class="head"><h2>All papers</h2><p>newest first</p></div>
+  <ol class="refs" id="refs"></ol>
+  <p class="intro">You can also find my papers on <a data-link="scholar" href="#">Google Scholar</a> and <a data-link="orcid" href="#">ORCID</a>.</p>
+</section>
+
+<section id="talks-sec">
+  <div class="head"><h2>Talks and posters</h2><p>4 talks, 2 posters</p></div>
+  <div id="talks" style="margin-top:18px"></div>
+</section>
+
+<section id="code">
+  <div class="head"><h2>Research-related code</h2><p>public on GitHub</p></div>
+  <ul class="repos" id="repos"></ul>
+</section>
+<footer id="footer"></footer>
+</div>
+<script src="data.js"></script>
+<script src="demos/core.js"></script>
+<script src="learn/common.js"></script>
+<script src="demos/dpd2d.js"></script>
+<script src="demos/research.js"></script>
+<script src="site.js"></script>
+</body>
+</html>

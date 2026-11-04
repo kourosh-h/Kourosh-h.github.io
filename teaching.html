@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Teaching · Kourosh Hasheminejad</title>
+<meta name="description" content="Courses, supervision, and teaching materials on molecular simulation, with explainers that run in the browser.">
+<meta name="theme-color" content="#d5d8dc" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kourosh Hasheminejad">
+<meta property="og:title" content="Teaching · Kourosh Hasheminejad">
+<meta property="og:description" content="Courses, supervision, and teaching materials on molecular simulation, with explainers that run in the browser.">
+<meta property="og:url" content="https://kourosh-h.github.io/teaching.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230c0e10'/%3E%3Cpath d='M8 23L16 16L24 9' stroke='%23959ea8' stroke-width='2.4'/%3E%3Ccircle cx='8' cy='23' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='16' cy='16' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='24' cy='9' r='4.8' fill='%23efa458'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Gloock&family=Spline+Sans+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+<header class="nav" id="nav"></header>
+
+<div class="pagehead">
+  <p class="kicker">Teaching</p>
+  <h1>Teaching molecular simulation</h1>
+  <p>I enjoy explaining how simulations work, from the equations of motion to the numbers that end up in a paper. At Aalto University, I developed course material, taught exercise sessions, supervised students, and led a forum for modelers. I also write explainers with small simulations that run in the browser, so that students can change a method and see what happens.</p>
+</div>
+
+<section>
+  <div class="head"><h2>Courses</h2><p>Aalto University</p></div>
+  <ul class="cases">
+    <li><h3>Soft Materials Modelling</h3><div><p>I worked as a content developer and teaching assistant. The course covers simulation methods for polymers and soft matter.</p></div></li>
+    <li><h3>Computational Chemistry I</h3><div><p>I worked as a content developer and teaching assistant.</p></div></li>
+    <li><h3>Personal Research Assignment</h3><div><p>I developed content for this course and helped students with their own research projects.</p></div></li>
+  </ul>
+</section>
+
+<section>
+  <div class="head"><h2>Supervision and community</h2><p></p></div>
+  <ul class="cases">
+    <li><h3>Supervision</h3><div><p>I advised five B.Sc. theses, as well as undergraduate research projects.</p></div></li>
+    <li><h3>Modeller's Council</h3><div><p>I founded the council in 2022 and led it until 2025. It was a biweekly forum where we showed software, discussed papers, and solved simulation problems together.</p></div></li>
+  </ul>
+</section>
+
+<section>
+  <div class="head"><h2>Teaching materials</h2><p>free to use</p></div>
+  <div class="warn" role="note"><p class="lbl">note</p><p>The teaching materials on this site are not the materials used in any Aalto course. The material I developed for the Aalto courses is not shared here.</p></div>
+  <p class="intro">These explainers have live examples that you can change. You are welcome to use them in a lecture or to send them to students. They are grouped into five tracks, from the basics of MD to drugs and proteins.</p>
+  <div class="tracks" id="learn-list"></div>
+</section>
+
+<section>
+  <div class="head"><h2>Notebooks</h2><p>run on Colab</p></div>
+  <ul class="cases">
+    <li><h3>Dissipative particle dynamics from scratch</h3><div><p>Three NumPy notebooks that follow the methods chapter of my thesis. The first builds a DPD fluid from its three pair forces, the second measures the link between the Flory-Huggins &chi; and a<sub>ij</sub>, and the third lets a block copolymer coating assemble into a layered film. Each notebook ends with exercises and worked solutions.</p><span class="ref">dpd-teaching · not pushed yet</span></div></li>
+    <li><h3><a href="small-sims.html">Thirteen small simulations</a></h3><div><p>Lennard-Jones, Ising, Langevin, polymers, DLA, Turing patterns, umbrella sampling, lattice Boltzmann, and active matter, followed by examples in LAMMPS and GROMACS. Each simulation is its own small repository with one notebook, checked against theory or experiment. They are good starting points for exercises.</p><span class="ref">13 repositories · not pushed yet</span></div></li>
+    <li><h3>Notebooks from the projects</h3><div><p>Each <a href="projects.html">project</a> has a notebook with a guide, from finite differences and Cahn-Hilliard to umbrella sampling of a drug through a membrane. Many of them work as course material on their own.</p></div></li>
+  </ul>
+  <p class="intro">Next, I plan a wider set of teaching notebooks on MD, coarse-graining, trajectory analysis, and machine learning.</p>
+</section>
+
+<section>
+  <div class="head"><h2>An example</h2><p>a common mistake</p></div>
+  <div class="teaser">
+    <div><p class="intro" style="margin-top:0">Students often fit the diffusion coefficient over the whole MSD curve. In this example, they can see what goes wrong. If you move the fit window into the ballistic part, or use only a few particles, the answer moves away from the true value. There are more examples like this on the <a href="learn-diffusion.html">diffusion</a> page.</p></div>
+    <figure data-demo="df-fit"></figure>
+  </div>
+</section>
+<footer id="footer"></footer>
+</div>
+<script src="data.js"></script>
+<script src="demos/core.js"></script>
+<script src="learn/common.js"></script>
+<script src="learn/diffusion.js"></script>
+<script src="site.js"></script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Coarse-graining · Kourosh Hasheminejad</title>
+<meta name="description" content="Ideas and methods of coarse-grained modeling, with live examples.">
+<meta name="theme-color" content="#d5d8dc" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kourosh Hasheminejad">
+<meta property="og:title" content="Coarse-graining · Kourosh Hasheminejad">
+<meta property="og:description" content="Ideas and methods of coarse-grained modeling, with live examples.">
+<meta property="og:url" content="https://kourosh-h.github.io/learn-cg.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230c0e10'/%3E%3Cpath d='M8 23L16 16L24 9' stroke='%23959ea8' stroke-width='2.4'/%3E%3Ccircle cx='8' cy='23' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='16' cy='16' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='24' cy='9' r='4.8' fill='%23efa458'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Gloock&family=Spline+Sans+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-learn="learn-cg.html">
+<div class="wrap">
+<header class="nav" id="nav"></header>
+<div class="pagehead">
+  <p class="kicker"><a href="learn.html">Learn</a></p>
+  <h1>Coarse-graining</h1>
+  <p>All-atom MD reaches nanoseconds to microseconds on systems of a few nanometers. Many questions about polymers, coatings, and membranes need larger systems and longer times. Coarse-graining groups atoms into beads, keeps the physics that matters for the question, and throws away the rest.</p>
+  <ol class="toc" id="toc"></ol>
+</div>
+
+<section class="lesson" id="s1">
+  <div>
+    <h2>Mapping atoms to beads</h2>
+    <p>The first choice is the mapping, which decides which atoms belong to which bead. Martini uses about four heavy atoms per bead. DPD beads can hold several water molecules. The bead usually sits at the center of mass of its atoms.</p>
+<p>Fewer beads mean fewer pairs to compute, but the bigger gain comes from somewhere else, as the next example shows.</p>
+<p class="try">Try: change the number of atoms per bead. The fast wiggles of the atoms disappear from the bead chain.</p>
+  </div>
+  <figure data-demo="cg-mapping" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s2">
+  <div>
+    <h2>Why CG simulations run faster</h2>
+    <p>Averaging out atoms smooths the energy landscape. The small bumps from atomic detail are gone, so the beads move further per unit of simulated time, and a larger time step is also stable. Together, these effects often give speedups of 100 to 1000 times over all-atom MD.</p>
+<p>The price is that the time scale of a CG model is not the real one, so it has to be calibrated, for example from diffusion coefficients.</p>
+<p class="try">Try: make the detailed landscape rougher. The detailed walkers get stuck, while the CG walkers keep crossing the barrier.</p>
+  </div>
+  <figure data-demo="cg-landscape" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s3">
+  <div>
+    <h2>Boltzmann inversion and IBI</h2>
+    <p>One structure-based way to get CG pair potentials is to make the CG model reproduce the RDF of the detailed model. Boltzmann inversion gives a first guess from the target g(r). It ignores the effect of all the other particles, so the RDF it gives is wrong at first.</p>
+<p>Iterative Boltzmann inversion corrects the potential step by step. You simulate, compare g(r) with the target, and push the potential up where there are too many pairs and down where there are too few.</p>
+<div class="eq">V<sub>0</sub>(r) = &minus;kT ln g<sub>target</sub>(r)<br>V<sub>i+1</sub>(r) = V<sub>i</sub>(r) + &alpha; kT ln[ g<sub>i</sub>(r) / g<sub>target</sub>(r) ]</div>
+<p class="try">Try: watch g(r) converge to the dashed target over a few iterations. The potential gets close to the true one but does not have to match it exactly.</p>
+  </div>
+  <figure data-demo="cg-ibi" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s4">
+  <div>
+    <h2>Force matching</h2>
+    <p>Instead of matching the structure, force matching (also called multiscale coarse-graining) fits the CG forces to the forces that the atoms feel, mapped onto the beads. When the CG force is written as a sum of basis functions, this is just linear least squares.</p>
+<div class="eq">minimize &Sigma; | F<sub>ref</sub> &minus; &Sigma;<sub>k</sub> c<sub>k</sub> &phi;<sub>k</sub>(r) |<sup>2</sup>  over c<sub>k</sub></div>
+<p class="try">Try: too few basis functions underfit the curve, and too many with noisy data start to chase the noise. ML coarse-graining (<a href="projects.html#n12">project 12</a>) replaces the basis with a neural network.</p>
+  </div>
+  <figure data-demo="cg-forcematch" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s5">
+  <div>
+    <h2>A bead-spring polymer model</h2>
+    <p>The classic CG polymer is made of beads joined by springs, with Lennard-Jones interactions between non-bonded beads. Each bead stands for a few monomers, and changing the bead-bead attraction mimics a poor or a good solvent.</p>
+<p>Even this minimal model reproduces scaling laws, the coil-to-globule transition, and entanglement effects that all-atom models struggle to reach.</p>
+<p class="try">Try: raise the attraction, and watch the chains collapse as the mean R<sub>g</sub> drops.</p>
+  </div>
+  <figure data-demo="polymer" data-text="off"></figure>
+</section>
+
+<nav class="pager" id="pager"></nav>
+<footer id="footer"></footer>
+</div>
+<script src="data.js"></script>
+<script src="demos/core.js"></script>
+<script src="learn/common.js"></script>
+<script src="learn/cg.js"></script>
+<script src="demos/polymer.js"></script>
+<script src="site.js"></script>
+</body>
+</html>

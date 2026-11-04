@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Neural networks · Kourosh Hasheminejad</title>
+<meta name="description" content="How neural networks work, from one neuron to training with backpropagation, with live examples.">
+<meta name="theme-color" content="#d5d8dc" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kourosh Hasheminejad">
+<meta property="og:title" content="Neural networks · Kourosh Hasheminejad">
+<meta property="og:description" content="How neural networks work, from one neuron to training with backpropagation, with live examples.">
+<meta property="og:url" content="https://kourosh-h.github.io/learn-nn.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230c0e10'/%3E%3Cpath d='M8 23L16 16L24 9' stroke='%23959ea8' stroke-width='2.4'/%3E%3Ccircle cx='8' cy='23' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='16' cy='16' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='24' cy='9' r='4.8' fill='%23efa458'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Gloock&family=Spline+Sans+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-learn="learn-nn.html">
+<div class="wrap">
+<header class="nav" id="nav"></header>
+<div class="pagehead">
+  <p class="kicker"><a href="learn.html">Learn</a></p>
+  <h1>Neural networks</h1>
+  <p>A neural network is a function with many adjustable numbers, and training means nudging these numbers downhill on a loss. This page shows what each part does.</p>
+  <ol class="toc" id="toc"></ol>
+</div>
+
+<section class="lesson" id="s1">
+  <div>
+    <h2>One neuron</h2>
+    <p>A neuron multiplies its input by a weight, adds a bias, and passes the result through a non-linear activation function. The weight sets how steep the response is, and the bias sets where it switches.</p>
+<div class="eq">y = f(w x + b)<br>sigmoid: 1/(1 + e<sup>&minus;z</sup>)   tanh   ReLU: max(0, z)</div>
+<p>Without the non-linearity, stacking neurons would only ever give a straight line. With it, a sum of many neurons can bend into any smooth shape.</p>
+<p class="try">Try: make w negative to flip the curve, and change b to move the switch point.</p>
+  </div>
+  <figure data-demo="nn-neuron" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s2">
+  <div>
+    <h2>Training with backpropagation</h2>
+    <p>This network has one input, a row of tanh neurons, and one output that adds them up. The faint curves are the contributions of the single hidden neurons, and the thick curve is their sum. Training changes the weights so that the sum goes through the data.</p>
+<p>The loss is the mean squared error. Its gradient with respect to every weight comes from the chain rule, applied from the output backward, and this is all that backpropagation is. Each step moves every weight a little against its gradient.</p>
+<div class="eq">L = (1/n) &Sigma; (y<sub>i</sub> &minus; t<sub>i</sub>)<sup>2</sup><br>w &larr; w &minus; &eta; &part;L/&part;w</div>
+<p>In the diagram, the line width shows the size of a weight, and the color shows its sign.</p>
+<p class="try">Try: one hidden unit can only make one bend, and with too high a learning rate, the loss jumps around. Add points by clicking, and watch the fit follow.</p>
+  </div>
+  <figure data-demo="nn-train" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s3">
+  <div>
+    <h2>Gradient descent and its friends</h2>
+    <p>Training is optimization. Plain gradient descent follows the slope. Momentum keeps a running velocity, so it rolls through small bumps. Adam scales each step by the recent size of the gradient, and it is the default choice for most networks.</p>
+<p class="try">Try: start the optimizers in different places on this energy surface. Which one finds the deepest minimum depends on where it starts.</p>
+  </div>
+  <figure data-demo="gd" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s4">
+  <div>
+    <h2>Classification</h2>
+    <p>The same kind of network, with a sigmoid at the end, outputs the probability of class 1. The colored background is the answer of the network at every point, and more hidden units let the boundary bend around the data.</p>
+<p class="try">Try: add points of the wrong class inside a region, and see how hard the network works to include them. This is overfitting in action.</p>
+  </div>
+  <figure data-demo="nn" data-text="off"></figure>
+</section>
+
+<section class="lesson" id="s5">
+  <div>
+    <h2>Where this goes in simulations</h2>
+    <p>Neural network potentials use exactly these pieces, with atomic descriptors as the input and the energy as the output. The page on <a href="learn-ml.html">machine learning in MD</a> covers this part.</p>
+  </div>
+</section>
+
+<nav class="pager" id="pager"></nav>
+<footer id="footer"></footer>
+</div>
+<script src="data.js"></script>
+<script src="demos/core.js"></script>
+<script src="learn/common.js"></script>
+<script src="learn/nnlearn.js"></script>
+<script src="demos/gd.js"></script>
+<script src="demos/nn.js"></script>
+<script src="site.js"></script>
+</body>
+</html>
