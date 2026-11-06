@@ -83,6 +83,7 @@
   <div>
     <h2>A coating that assembles itself</h2>
     <p>This is the system from my thesis, simplified to 2D. Amphiphilic di-block copolymers in water sit above a hydrophilic surface, such as cellulose or starch. As the water evaporates, the hydrophilic blocks attach to the substrate, and the hydrophobic blocks form a layer above them.</p>
+<p>The simulation here is standard DPD in 2D, with the soft repulsions, friction, and random forces of Groot and Warren. Evaporation is kept simple. Now and then, the highest water bead is taken out, and the top of the box moves down, so the density stays at 3. There is no vapor phase, so no many-body DPD is needed.</p>
 <p>In 3D and with more realistic parameters, this process decides whether the coating is continuous or full of defects, and therefore how well it blocks water.</p>
 <p class="try">Try: change the hydrophobic block length, and stop the evaporation to compare a wet and a dry film.</p>
   </div>
