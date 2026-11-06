@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bead Lab · Kourosh Hasheminejad</title>
+<meta name="description" content="Bead Lab, an iPhone app with eight simulations of atoms, polymers and patterns that run live on the phone, written from scratch in Swift.">
+<meta name="theme-color" content="#d5d8dc" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kourosh Hasheminejad">
+<meta property="og:title" content="Bead Lab · Kourosh Hasheminejad">
+<meta property="og:description" content="Bead Lab, an iPhone app with eight simulations of atoms, polymers and patterns that run live on the phone, written from scratch in Swift.">
+<meta property="og:url" content="https://kourosh-h.github.io/bead-lab.html">
+<link rel="canonical" href="https://kourosh-h.github.io/bead-lab.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230c0e10'/%3E%3Cpath d='M8 23L16 16L24 9' stroke='%23959ea8' stroke-width='2.4'/%3E%3Ccircle cx='8' cy='23' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='16' cy='16' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='24' cy='9' r='4.8' fill='%23efa458'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Gloock&family=Spline+Sans+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+<header class="nav" id="nav"></header>
+
+<div class="pagehead">
+  <p class="kicker"><a href="mini.html">Projects / extras</a></p>
+  <h1>Bead Lab</h1>
+  <p class="lede">Bead Lab is an iPhone app with eight simulations that run live on the phone, from a Lennard-Jones liquid to polymer blends and patterns that form on their own. Each one has sliders and a short page on the model behind it. Most of them also plot one quantity as they run, and in some you can heat, stir or paint the system with your finger. The simulations are written from scratch in Swift, and the Gray-Scott patterns run on the phone's GPU.</p>
+</div>
+
+<section>
+  <div class="head"><h2>The eight simulations</h2><p>in three groups, as in the app</p></div>
+  <ul class="shots">
+    <li><img src="images/bead-lab/lj.jpg" width="600" height="1304" alt="Bead Lab screen with the Lennard-Jones fluid and its radial distribution function" loading="lazy">
+      <div><span class="tag">Molecules</span><h4>Lennard-Jones fluid</h4><p>1200 atoms in molecular dynamics, with velocity Verlet, a Langevin thermostat and cell lists. Change the temperature and the density, heat a spot with your finger, and watch the peaks of g(r).</p></div></li>
+    <li><img src="images/bead-lab/brownian.jpg" width="600" height="1304" alt="Bead Lab screen with Brownian particles, their trails and the mean squared displacement" loading="lazy">
+      <div><span class="tag">Molecules</span><h4>Brownian motion and diffusion</h4><p>400 particles in overdamped Langevin dynamics, four of them with trails. The mean squared displacement follows the 4Dt line for the D you set.</p></div></li>
+    <li><img src="images/bead-lab/dpd.jpg" width="600" height="1304" alt="Bead Lab screen with a DPD mixture of two bead types separating into domains" loading="lazy">
+      <div><span class="tag">Polymers and soft matter</span><h4>DPD blends and diblock copolymers</h4><p>5184 soft beads with the Groot and Warren model. Raise the repulsion between A and B, and a blend separates. In longer chains, the A and B blocks are bonded together, so they can only separate into small domains.</p></div></li>
+    <li><img src="images/bead-lab/coil.jpg" width="600" height="1304" alt="Bead Lab screen with a polymer chain and its radius of gyration" loading="lazy">
+      <div><span class="tag">Polymers and soft matter</span><h4>Polymer coil and globule</h4><p>An 80-bead chain with an attraction you can tune. In a poor solvent, the chain collapses into a globule, and the radius of gyration shows when.</p></div></li>
+    <li><img src="images/bead-lab/brush.jpg" width="600" height="1304" alt="Bead Lab screen with polymer chains grafted to a wall and their density profile" loading="lazy">
+      <div><span class="tag">Polymers and soft matter</span><h4>Polymer brush on a surface</h4><p>Between 4 and 32 chains grafted to a wall. The more chains there are, the further they stretch away from the surface, as the density profile shows.</p></div></li>
+    <li><img src="images/bead-lab/ising.jpg" width="600" height="1304" alt="Bead Lab screen with Ising spins and the magnetization" loading="lazy">
+      <div><span class="tag">Fields and patterns</span><h4>Ising model</h4><p>192 &times; 192 spins with Metropolis Monte Carlo. Near the critical temperature, about 2.27, domains of every size appear, and a finger paints a patch of up spins.</p></div></li>
+    <li><img src="images/bead-lab/cahn-hilliard.jpg" width="600" height="1304" alt="Bead Lab screen with Cahn-Hilliard domains and their size over time" loading="lazy">
+      <div><span class="tag">Fields and patterns</span><h4>Cahn-Hilliard phase separation</h4><p>A 128 &times; 128 composition field, solved with finite differences. The domains slowly grow, and the plot compares their size with the t<sup>1/3</sup> law.</p></div></li>
+    <li><img src="images/bead-lab/gray-scott.jpg" width="600" height="1304" alt="Bead Lab screen with a Gray-Scott reaction-diffusion pattern" loading="lazy">
+      <div><span class="tag">Fields and patterns</span><h4>Gray-Scott patterns</h4><p>A 512 &times; 512 grid that runs on the GPU as a Metal compute shader. Change the feed and kill rates, or pick coral, spots, worms or maze.</p></div></li>
+  </ul>
+</section>
+
+<section>
+  <div class="head"><h2>One of them in your browser</h2><p>the same model as in the app</p></div>
+  <div class="teaser">
+    <div>
+      <p class="intro" style="margin-top:0">The Gray-Scott model is two chemicals that react and diffuse. One feeds on the other, and depending on the feed and kill rates, the pattern settles into spots, stripes or a maze. Here it runs in your browser. In the app, it runs on the phone's GPU, on a grid of 512 &times; 512 cells.</p>
+      <p class="intro">The other models are explained, with simulations you can run here, on the learn pages for <a href="learn-md.html">molecular dynamics</a>, <a href="learn-dpd.html">dissipative particle dynamics</a>, <a href="learn-polymer.html">polymers in solution</a>, <a href="learn-mc.html">Monte Carlo</a> and <a href="learn-diffusion.html">diffusion</a>.</p>
+    </div>
+    <figure data-demo="grayscott" data-text="off"></figure>
+  </div>
+</section>
+
+<section>
+  <div class="head"><h2>How it is built</h2><p>Swift, SwiftUI and Metal</p></div>
+  <div class="methods">
+    <div>
+      <h3>The app</h3>
+      <ul>
+        <li><b>Simulations in plain Swift</b><p>The simulations have no screen code, and all of them share one small protocol: sliders, a step, a picture and a touch. The particle simulations split their force loops over all CPU cores.</p></li>
+        <li><b>Screens in SwiftUI</b><p>The sliders, the live plot and the page on each model.</p></li>
+        <li><b>Gray-Scott on the GPU</b><p>A Metal compute shader updates the 512 &times; 512 grid 16 times per frame.</p></li>
+      </ul>
+    </div>
+    <div>
+      <h3>The checks</h3>
+      <ul>
+        <li><b>Fast enough for the screen</b><p>One frame of any CPU simulation takes 2 to 7 ms on a 4-core test machine, well inside the 16 ms of a 60 Hz screen.</p></li>
+        <li><b>Physics tests</b><p>Ten engine tests check, for example, that the thermostats hold their temperature, that the Brownian motion gives back the D you set, that DPD blends separate at high a<sub>AB</sub>, and that Cahn-Hilliard keeps the total composition.</p></li>
+        <li><b>Built on every push</b><p>GitHub Actions runs the tests and builds the app for the iPhone simulator.</p></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="head"><h2>Trying it</h2><p>built with Xcode</p></div>
+  <p class="intro">Bead Lab is not in the App Store. To run it on an iPhone, you build it with Xcode on a Mac, signed with a free Apple Account. With a free account, the app stays on the phone for seven days, and then it has to be installed again. The code goes on GitHub soon.</p>
+</section>
+
+<section>
+  <div class="head"><h2>References</h2><p>for the models in the app</p></div>
+  <ol class="refs">
+    <li><div><div class="t">Dissipative particle dynamics: bridging the gap between atomistic and mesoscopic simulation</div><div class="v">R. D. Groot and P. B. Warren. <i>J. Chem. Phys.</i> 107, 4423 (1997).</div></div></li>
+    <li><div><div class="t">Role of repulsive forces in determining the equilibrium structure of simple liquids</div><div class="v">J. D. Weeks, D. Chandler and H. C. Andersen. <i>J. Chem. Phys.</i> 54, 5237 (1971).</div></div></li>
+    <li><div><div class="t">Equation of state calculations by fast computing machines</div><div class="v">N. Metropolis, A. W. Rosenbluth, M. N. Rosenbluth, A. H. Teller and E. Teller. <i>J. Chem. Phys.</i> 21, 1087 (1953).</div></div></li>
+    <li><div><div class="t">Free energy of a nonuniform system. I. Interfacial free energy</div><div class="v">J. W. Cahn and J. E. Hilliard. <i>J. Chem. Phys.</i> 28, 258 (1958).</div></div></li>
+    <li><div><div class="t">Complex patterns in a simple system</div><div class="v">J. E. Pearson. <i>Science</i> 261, 189 (1993).</div></div></li>
+  </ol>
+</section>
+<footer id="footer"></footer>
+</div>
+<script src="data.js"></script>
+<script src="demos/core.js"></script>
+<script src="demos/grayscott.js"></script>
+<script src="site.js"></script>
+</body>
+</html>

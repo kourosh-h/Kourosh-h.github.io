@@ -7,11 +7,12 @@ const page = location.pathname.split("/").pop() || "index.html";
 
 // navigation and footer
 const navItems = [["research.html", "research"], ["industry.html", "industry"], ["teaching.html", "teaching"], ["learn.html", "learn"], ["projects.html", "projects"], ["cv.html", "cv"], ["playground.html", "playground"]];
-const phasePages = PHASES.map(ph => ph.page);
+// phase pages and the pages of single projects all belong to "projects" in the navigation
+const projectPages = PHASES.map(ph => ph.page).concat(PROJECTS.filter(p => p.page).map(p => p.page));
 if ($("nav")) {
   $("nav").innerHTML = `<a class="home" href="index.html">Kourosh Hasheminejad</a>
     <ul>${navItems.map(([href, label]) => {
-      const current = href === page || (label === "projects" && phasePages.includes(page)) || (label === "learn" && page.startsWith("learn-")) || (label === "playground" && page.startsWith("play-"));
+      const current = href === page || (label === "projects" && projectPages.includes(page)) || (label === "learn" && page.startsWith("learn-")) || (label === "playground" && page.startsWith("play-"));
       return `<li><a href="${href}"${current ? ' aria-current="page"' : ""}>${label}</a></li>`;
     }).join("")}</ul>`;
 }
@@ -50,7 +51,7 @@ function projectRow(p) {
         ${p.result ? `<p class="res">${esc(p.result)}</p>` : ""}
         <div class="tags">${p.tags.map(esc).join(" · ")}</div>
       </div>
-      <div class="go">${p.status === "done" ? `${p.repo ? `<a href="${esc(p.repo)}">code</a>` : ""}${p.demo ? `<a href="${esc(p.demo)}">demo</a>` : ""}` : p.status === "ready" ? `<span class="soon">not pushed yet</span>` : ""}</div>
+      <div class="go">${p.page ? `<a href="${esc(p.page)}">page</a>` : ""}${p.status === "done" ? `${p.repo ? `<a href="${esc(p.repo)}">code</a>` : ""}${p.demo ? `<a href="${esc(p.demo)}">demo</a>` : ""}` : p.status === "ready" ? `<span class="soon">not pushed yet</span>` : ""}</div>
     </li>`;
 }
 
