@@ -29,14 +29,21 @@ body { margin: 0; background: var(--ground); color: var(--ink); font: 17px/1.6 v
 a { color: var(--a); text-underline-offset: 3px; text-decoration-thickness: 1px; }
 a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--b); outline-offset: 2px; }
 .wrap {
-  max-width: 1080px; margin: 0 auto; padding-block: 24px 72px;
+  max-width: 1080px; margin: 0 auto; padding-block: 12px 72px;
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
 .mono { font-family: var(--mono); }
 
-/* top navigation */
-.nav { display: flex; justify-content: space-between; align-items: baseline; gap: 8px 24px; flex-wrap: wrap; padding-bottom: 12px; border-bottom: 1px solid var(--rule); }
+/* top navigation: it stays at the top of the screen while the page scrolls.
+   site.js puts its height in --navh, so that links to a part of a page land below it */
+html { scroll-padding-top: calc(var(--navh, 48px) + 8px); }
+@media (max-width: 640px) { html { scroll-padding-top: calc(var(--navh, 92px) + 8px); } }
+.nav {
+  position: sticky; top: 0; z-index: 20; background: var(--ground);
+  display: flex; justify-content: space-between; align-items: baseline; gap: 8px 24px; flex-wrap: wrap;
+  padding-block: 12px; border-bottom: 1px solid var(--rule);
+}
 .nav .home { font: 400 1.15rem var(--display); color: var(--ink); text-decoration: none; }
 .nav ul { display: flex; flex-wrap: wrap; gap: 4px 18px; list-style: none; margin: 0; padding: 0; font: .85rem var(--mono); }
 .nav ul a { color: var(--muted); text-decoration: none; }
@@ -200,7 +207,7 @@ footer ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: w
 footer a { color: var(--muted); }
 footer a:hover { color: var(--ink); }
 @media (max-width: 640px) { footer { grid-template-columns: 1fr; } }
-.skip { position: absolute; left: 16px; top: -60px; z-index: 10; background: var(--ink); color: var(--ground); padding: 6px 12px; font: .85rem var(--mono); }
+.skip { position: absolute; left: 16px; top: -60px; z-index: 30; background: var(--ink); color: var(--ground); padding: 6px 12px; font: .85rem var(--mono); }
 .skip:focus { top: 8px; }
 [tabindex="-1"]:focus { outline: none; }
 
@@ -287,7 +294,7 @@ footer a:hover { color: var(--ink); }
 .refs .st { font: .7rem var(--mono); color: var(--b); text-transform: uppercase; letter-spacing: .06em; }
 .refs li:has(> .ring)::before { content: none; }
 .refs li > .ring { margin-top: 1px; }
-@media (min-width: 861px) { .figs.stick { position: sticky; top: 20px; } }
+@media (min-width: 861px) { .figs.stick { position: sticky; top: calc(var(--navh, 48px) + 20px); } }
 
 /* industry page */
 .cta { display: inline-block; margin-top: 22px; font: 500 .85rem var(--mono); color: var(--ground); background: var(--b); padding: 9px 16px; text-decoration: none; }

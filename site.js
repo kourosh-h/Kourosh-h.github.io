@@ -15,6 +15,12 @@ if ($("nav")) {
       const current = href === page || (label === "projects" && projectPages.includes(page)) || (label === "learn" && page.startsWith("learn-")) || (label === "playground" && page.startsWith("play-"));
       return `<li><a href="${href}"${current ? ' aria-current="page"' : ""}>${label}</a></li>`;
     }).join("")}</ul>`;
+  // the menu stays at the top of the screen (style.css), and its height tells the browser where a link to a part
+  // of a page should land, so that the target is not hidden under the menu
+  const navHeight = () => document.documentElement.style.setProperty("--navh", $("nav").offsetHeight + "px");
+  navHeight();
+  addEventListener("resize", navHeight);
+  if (document.fonts) document.fonts.ready.then(navHeight);
 }
 if ($("footer")) {
   const listOf = pairs => pairs.map(([href, label]) => `<li><a href="${href}">${label}</a></li>`).join("");
