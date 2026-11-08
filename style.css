@@ -206,6 +206,7 @@ footer p { margin: 6px 0 0; max-width: 34ch; }
 footer ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 16px; align-content: start; }
 footer a { color: var(--muted); }
 footer a:hover { color: var(--ink); }
+footer .dates { grid-column: 1 / -1; max-width: none; margin: 0; display: flex; flex-wrap: wrap; gap: 2px 24px; }
 @media (max-width: 640px) { footer { grid-template-columns: 1fr; } }
 .skip { position: absolute; left: 16px; top: -60px; z-index: 30; background: var(--ink); color: var(--ground); padding: 6px 12px; font: .85rem var(--mono); }
 .skip:focus { top: 8px; }

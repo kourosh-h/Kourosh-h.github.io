@@ -27,7 +27,8 @@ if ($("footer")) {
   $("footer").innerHTML = `
     <div><b>Kourosh Hasheminejad</b><p>Molecular simulation of materials. Most figures on this site are small simulations that run in your browser.</p></div>
     <nav aria-label="All pages"><ul>${listOf([["index.html", "home"], ...navItems])}</ul></nav>
-    <ul>${listOf([[LINKS.github, "github"], [LINKS.linkedin, "linkedin"], [LINKS.scholar, "scholar"], [LINKS.orcid, "orcid"]])}</ul>`;
+    <ul>${listOf([[LINKS.github, "github"], [LINKS.linkedin, "linkedin"], [LINKS.scholar, "scholar"], [LINKS.orcid, "orcid"]])}</ul>
+    <p class="dates"><span>Online since ${SITE_DATES.online}</span><span>Last updated ${SITE_DATES.updated}</span></p>`;
 }
 
 // a skip link for keyboard users, pointing at the first block after the navigation

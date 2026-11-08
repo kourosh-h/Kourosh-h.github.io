@@ -12,6 +12,10 @@ const LINKS = {
 // It disappears by itself on a page once all of its projects are "done". Set it to "" to remove it everywhere.
 const UPLOAD_NOTE = "I am putting these projects on GitHub one at a time. A project with a code link is already there, and the others get their links as they go up.";
 
+// The two dates at the bottom of every page: when the first version went online, and the last update.
+// Set "updated" to the day of the push whenever the site changes.
+const SITE_DATES = { online: "November 4, 2026", updated: "November 8, 2026" };
+
 // One page per phase of the roadmap. demo = the simulation shown at the top of that page.
 const PHASES = [
   { name: "Foundations", page: "foundations.html", demo: "lj",
