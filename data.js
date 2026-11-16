@@ -14,7 +14,7 @@ const UPLOAD_NOTE = "I am putting these projects on GitHub one at a time. A proj
 
 // The two dates at the bottom of every page: when the first version went online, and the last update.
 // Set "updated" to the day of the push whenever the site changes.
-const SITE_DATES = { online: "November 4, 2026", updated: "November 15, 2026" };
+const SITE_DATES = { online: "November 4, 2026", updated: "November 16, 2026" };
 
 // One page per phase of the roadmap. demo = the simulation shown at the top of that page.
 const PHASES = [
