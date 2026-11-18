@@ -174,7 +174,7 @@ const TALKS = [
 const EDUCATION = [
   { when: "2026", what: "D.Sc. (Tech), Chemistry and Materials Science", where: "Aalto University, Finland", note: "Thesis on multiscale modeling of block copolymer surface coatings." },
   { when: "2019", what: "M.Sc., Materials Science and Engineering", where: "K. N. Toosi University of Technology, Iran", note: "Molecular modeling of polymer/graphene nanocomposites, interface engineering, and shape memory behavior." },
-  { when: "2016", what: "B.Sc., Materials Science and Engineering", where: "Shahid Beheshti University, Iran", note: "Metallurgy, including heat treatment, casting, and mechanical testing. Project on electrodeposited nickel-alumina coatings on steel." },
+  { when: "2016", what: "B.Sc., Materials Science and Engineering", where: "Shahid Bahonar University of Kerman, Iran", note: "Metallurgy, including heat treatment, casting, and mechanical testing. Project on electrodeposited nickel-alumina coatings on steel." },
 ];
 
 const EXPERIENCE = [
