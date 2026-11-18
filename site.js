@@ -6,7 +6,7 @@ const statusText = { "done": "done", "ready": "built, not on GitHub yet", "in-pr
 const page = location.pathname.split("/").pop() || "index.html";
 
 // navigation and footer
-const navItems = [["research.html", "research"], ["industry.html", "industry"], ["learn.html", "learn"], ["projects.html", "projects"], ["cv.html", "cv"], ["playground.html", "playground"]];
+const navItems = [["research.html", "research"], ["industry.html", "industry"], ["learn.html", "learn"], ["projects.html", "projects"], ["cv.html", "cv"], ["playground.html", "playground"], ["ai-use.html", "AI use"]];
 // phase pages and the pages of single projects all belong to "projects" in the navigation
 const projectPages = PHASES.map(ph => ph.page).concat(PROJECTS.filter(p => p.page).map(p => p.page));
 if ($("nav")) {

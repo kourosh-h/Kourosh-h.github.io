@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI use · Kourosh Hasheminejad</title>
+<meta name="description" content="How AI tools can save time, improve accuracy, and help people learn in research and molecular simulation, how to use them well, their downsides, and what to be careful about.">
+<meta name="theme-color" content="#d5d8dc" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kourosh Hasheminejad">
+<meta property="og:title" content="AI use · Kourosh Hasheminejad">
+<meta property="og:description" content="How AI tools can save time, improve accuracy, and help people learn in research and molecular simulation, how to use them well, their downsides, and what to be careful about.">
+<meta property="og:url" content="https://kourosh-h.github.io/ai-use.html">
+<link rel="canonical" href="https://kourosh-h.github.io/ai-use.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230c0e10'/%3E%3Cpath d='M8 23L16 16L24 9' stroke='%23959ea8' stroke-width='2.4'/%3E%3Ccircle cx='8' cy='23' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='16' cy='16' r='4.8' fill='%237f9cff'/%3E%3Ccircle cx='24' cy='9' r='4.8' fill='%23efa458'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Gloock&family=Spline+Sans+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+<script data-goatcounter="https://kourosh.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+</head>
+<body>
+<div class="wrap">
+<header class="nav" id="nav"></header>
+
+<div class="pagehead">
+  <p class="kicker">AI use</p>
+  <h1>Using AI in research and simulation</h1>
+  <p>AI tools are now part of everyday work in science. Chat assistants answer questions, explain methods, and write code, and machine learning models have become part of the simulations themselves. When they are used well, they save time, catch mistakes, and make it much easier to learn something new or to turn an idea into something that works. When they are used carelessly, they give confident answers that are wrong, and they can leak data that should stay private. This page covers where AI helps, how to use it well, where it goes wrong, and what to be careful about.</p>
+  <ul class="jump">
+    <li><a href="#helps">where it helps</a></li>
+    <li><a href="#simulation">in simulations</a></li>
+    <li><a href="#habits">using it well</a></li>
+    <li><a href="#downsides">downsides</a></li>
+    <li><a href="#careful">being careful</a></li>
+  </ul>
+</div>
+
+<section id="helps">
+  <div class="head"><h2>Where AI helps</h2><p>four gains</p></div>
+  <ul class="cases">
+    <li><h3>Less time on routine work</h3><div><p>Much of the work around research is routine. Input files, job scripts, unit conversions, plots, and small scripts that move data from one format to another all take time but need little thought. An assistant can write a first version of them in seconds. The time saved can go to the parts that need a person, such as choosing the model, checking the results, and thinking about what they mean.</p></div></li>
+    <li><h3>More accurate work</h3><div><p>An assistant is a second reader that does not get tired. It can read a script and point out a missing unit conversion, a loop that skips the last frame, or a distance that ignores the periodic box. It can also suggest tests, such as comparing a computed value with a known result. It does not replace checking, but it makes careful checking quicker.</p></div></li>
+    <li><h3>Learning more, and faster</h3><div><p>An assistant is a patient tutor. It can explain a method step by step, go back to the basics when something is unclear, and explain the same idea again in a different way. It can walk through an error message, a paragraph of a paper, or a page of a manual, and it can ask you questions to check what you understood. This makes it much easier to start with a new method, a new software package, or a new programming language.</p></div></li>
+    <li><h3>From an idea to something that works</h3><div><p>Many good ideas are never built because building them takes too long. With an assistant, a first version of a tool, an app, or a small simulation can be ready in a day, so the idea can be tested early and then improved. A personal website is a good example. Not long ago, most people paid someone to build and maintain one. Today, you can build it with an assistant, learn how it works little by little, and keep it up to date yourself.</p></div></li>
+  </ul>
+</section>
+
+<section id="simulation">
+  <div class="head"><h2>AI in molecular simulation</h2><p>next to the model and inside it</p></div>
+  <p class="intro">In simulation work, AI helps in two different ways. An assistant can help with the work around a simulation, and machine learning models can become part of the simulation itself.</p>
+  <dl class="qa" style="max-width:46em;margin-top:20px">
+    <dt>Next to the simulation</dt>
+    <dd>An assistant can write a first input file for GROMACS or LAMMPS from a short description of the system and explain what each line does. It can write the job script for a cluster, the analysis script that turns a trajectory into a density profile or a radial distribution function, and the code for the figures. When a run crashes, it can read the log file and suggest where the problem is. It can also translate code, for example from a slow Python loop to NumPy, or from one simulation package to another.</dd>
+    <dt>Inside the simulation</dt>
+    <dd>Machine learning potentials, such as MACE, learn energies and forces from quantum chemistry and then run MD close to that accuracy at a fraction of the cost. Active learning lets a potential choose the new calculations it needs. Machine-learned coarse-grained models learn the forces between beads from all-atom simulations. Surrogate models and Bayesian optimization pick the next simulation or experiment, so that fewer runs are needed to find a good recipe. The ideas behind these methods are explained on the <a href="learn-ml.html">machine learning in MD</a> page.</dd>
+  </dl>
+</section>
+
+<section id="habits">
+  <div class="head"><h2>Using it well</h2><p>seven habits</p></div>
+  <ol class="steps" style="max-width:46em">
+    <li><span><b>Ask about things you can check.</b> AI is most useful for problems where you know what a right answer looks like, such as a value from a paper, a limiting case, or a quantity that should stay constant.</span></li>
+    <li><span><b>Give the full context.</b> Say which software and which version you use, the units, and what the system is. Good context gives better answers, and it makes wrong answers easier to spot.</span></li>
+    <li><span><b>Work in small steps.</b> Ask for one piece at a time, run it, and check it before asking for the next piece. A long answer that does everything at once is hard to check.</span></li>
+    <li><span><b>Ask why, not only what.</b> Ask for the reason behind each step. If you cannot explain a line of code or an equation in your own words, it is not ready to use.</span></li>
+    <li><span><b>Test on a case with a known answer.</b> Before a new script meets the real system, run it on an ideal gas, a harmonic oscillator, or a Lennard-Jones fluid at a state point from the literature. A script that fails on a simple case cannot be trusted on a hard one.</span></li>
+    <li><span><b>Keep learning.</b> Use the assistant to learn, not only to finish. Write a small piece yourself first and then compare, or ask it to quiz you. Over time, you need it less for the basics and more for new things.</span></li>
+    <li><span><b>Keep your own voice and judgment.</b> For text, write the ideas yourself and use the assistant for grammar and clarity. For decisions, treat its answer as one opinion and make the final call yourself.</span></li>
+  </ol>
+</section>
+
+<section id="downsides">
+  <div class="head"><h2>Downsides and how to avoid them</h2><p>six problems</p></div>
+  <div class="teaser">
+    <div>
+      <p class="intro" style="margin-top:0">The most serious mistakes give no error message. A script with a time step that is too large, a thermostat that does not fit the question, or a distance that ignores the periodic box still runs and still gives numbers. In the figure, both integrators run without any complaint. Euler adds a little energy at every step, so its orbit spirals outward, while velocity Verlet stays on the circle. If you raise the time step, the difference grows quickly.</p>
+      <p class="intro">A simple check of a quantity that should stay constant catches this kind of mistake, whoever wrote the code. There is more about integrators on the <a href="learn-md.html">molecular dynamics</a> page.</p>
+    </div>
+    <figure data-demo="md-integrator"></figure>
+  </div>
+  <ul class="cases">
+    <li><h3>Confident mistakes</h3><div><p>An assistant writes a wrong answer in the same calm tone as a right one. It can invent a function argument, a force field parameter, or a reference that does not exist.</p><p><b>What helps.</b> Check every number and every reference against the original source, and never cite a paper you have not opened. Run code before you trust it, and read what it does.</p></div></li>
+    <li><h3>Code that runs but is wrong</h3><div><p>As in the figure, a script can run to the end and still be wrong.</p><p><b>What helps.</b> Check the quantities you know. Energy should be conserved in NVE, the temperature should match the thermostat, the density of water should be close to 1 g/cm<sup>3</sup>, and a radial distribution function should go to 1 at long distances.</p></div></li>
+    <li><h3>Old or mixed-up versions</h3><div><p>Software changes from version to version. An assistant may suggest an option from an old version of GROMACS or LAMMPS, or mix the syntax of two different packages.</p><p><b>What helps.</b> Give the version in the question, and look up each keyword in the manual of that version.</p></div></li>
+    <li><h3>Learning less</h3><div><p>If the assistant always writes the code, you never learn to write it, and you cannot find its mistakes.</p><p><b>What helps.</b> Write first and compare, ask for explanations, and now and then redo a small piece by hand.</p></div></li>
+    <li><h3>Work that looks like everyone else's</h3><div><p>Text, figures, and designs made from short prompts tend to look alike, and readers notice.</p><p><b>What helps.</b> Start from your own ideas, data, and style, and edit the result until it sounds like you.</p></div></li>
+    <li><h3>An assistant that agrees too easily</h3><div><p>Assistants tend to agree with the person who asks. If you ask whether your idea is good, the answer is often yes.</p><p><b>What helps.</b> Ask it to find the weak points instead, or to argue for the other side.</p></div></li>
+  </ul>
+</section>
+
+<section id="careful">
+  <div class="head"><h2>Things to be careful about</h2><p>before you paste or run</p></div>
+  <ol class="rules">
+    <li><b>Private data</b><p>Anything pasted into an online assistant leaves your computer and may be stored. Data from a company, unpublished results, and personal data should only go into tools that your company or university has approved.</p></li>
+    <li><b>Passwords and keys</b><p>Never paste a password, an API key, or a private key, not even hidden inside a script, a configuration file, or a log.</p></li>
+    <li><b>Commands you have not read</b><p>Read every command before you run it, especially one that deletes files, changes permissions, or sends many jobs to a shared cluster.</p></li>
+    <li><b>Licenses and credit</b><p>Generated code and text can be close to existing work. Check the license before you reuse code, and cite the papers and software that a method comes from.</p></li>
+    <li><b>Rules for papers and theses</b><p>Journals, universities, and companies have their own rules on AI use. Most journals do not accept an AI tool as an author, and a manuscript under review is confidential, so it should not go into an online tool. When it matters, say how AI was used.</p></li>
+    <li><b>Safety questions</b><p>Check any advice about chemicals, lab equipment, or health against the safety data sheet, the manual, or an expert. Here, a wrong answer can hurt someone.</p></li>
+  </ol>
+  <p class="intro">Overall, AI tools work best for people who know what a right answer looks like. They make good work faster and learning easier, but the person who uses them stays responsible for the result.</p>
+</section>
+<footer id="footer"></footer>
+</div>
+<script src="data.js"></script>
+<script src="demos/core.js"></script>
+<script src="learn/common.js"></script>
+<script src="learn/md.js"></script>
+<script src="site.js"></script>
+</body>
+</html>
