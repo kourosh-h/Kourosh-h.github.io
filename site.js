@@ -170,7 +170,7 @@ if ($("refs")) {
     const no = p.page ? `<span class="ring ${p.grp}">${p.page.slice(1)}</span>` : "";
     return `<li>${no}<div>
       <div class="t">${href ? `<a href="${href}">${esc(p.title)}</a>` : esc(p.title)}</div>
-      <div class="v">${esc(p.authors).replace(esc(ME), `<span class="me">${esc(ME)}</span>`)}. <i>${esc(p.venue)}</i> (${p.year}).${p.type === "review" ? ` <span class="st">in review</span>` : ""}${p.page ? ` <a class="see" href="#${p.page}">explained above</a>` : ""}</div>
+      <div class="v">${esc(p.authors).replace(esc(ME), `<span class="me">${esc(ME)}</span>`)}. <i>${esc(p.venue)}</i> (${p.year}).${p.type === "review" ? ` <span class="st">in revision</span>` : ""}${p.page ? ` <a class="see" href="#${p.page}">explained above</a>` : ""}</div>
     </div></li>`;
   }).join("");
 }

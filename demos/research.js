@@ -935,7 +935,7 @@ DEMOS["rs-sam"] = {
   narrowAspect: "4 / 5",
   title: "Odd and even chains",
   text: "An alkylsilane chain grafted to silica, drawn in the all-trans form. Each carbon adds a bond that zigzags the other way, so the last bond of the chain flips between two directions as the chain grows by one carbon. This is where odd-even effects at a surface come from. The dots show the systems of the study, one dot per system.",
-  details: "Geometry only, with a C-C-C angle of 112&deg; and the chain axis tilted from the surface normal by the tilt slider. Which parity points up depends on how the first bond leaves the surface. The study covers chain lengths 4 to 8 and eleven coverages from 0 to 3.9 chains/nm&sup2;, each dry and in water (all-atom MD, GROMACS). Its results are not shown while the paper is in review",
+  details: "Geometry only, with a C-C-C angle of 112&deg; and the chain axis tilted from the surface normal by the tilt slider. Which parity points up depends on how the first bond leaves the surface. The study covers chain lengths 4 to 8 and eleven coverages from 0 to 3.9 chains/nm&sup2;, each dry and in water (all-atom MD, GROMACS). Its results are not shown while the paper is in revision",
   make() {
     const p = { n: 7, tilt: 20 };
     const COV = [0, 0.08, 0.45, 0.77, 1.2, 1.65, 2, 2.4, 2.92, 3.45, 3.9];
@@ -1013,14 +1013,14 @@ DEMOS["rs-map"] = {
   aspect: "3 / 2",
   narrowAspect: "4 / 5",
   title: "Length and time scales of my work",
-  text: "Each gray oval is a family of methods, placed by the system sizes and times that it can reach. Each number is one paper on this page, placed where its simulations sit, and a dashed ring means that the paper is in review. Most of my work is all-atom MD at nanometers and nanoseconds. The coating papers use DPD to reach a whole film, and for the monolayer work, I used quantum chemistry to get the parameters of one bond.",
+  text: "Each gray oval is a family of methods, placed by the system sizes and times that it can reach. Each number is one paper on this page, placed where its simulations sit, and a dashed ring means that the paper is in revision. Most of my work is all-atom MD at nanometers and nanoseconds. The coating papers use DPD to reach a whole film, and for the monolayer work, I used quantum chemistry to get the parameters of one bond.",
   details: "The positions are rough, after Fig. 3.1 of my thesis. In DPD, the size and time of a bead depend on how many molecules it stands for, so those two points could move by a factor of ten",
   make() {
     const PAPERS = [
       { n: "1", L: -7.25, t: -5.4, g: "c", say: "1, J. Colloid Interface Sci. 2023: DPD, a 40 x 40 x 40 box in bead diameters, a million steps" },
       { n: "2", L: -6.85, t: -4.75, g: "c", say: "2, Appl. Surf. Sci. 2023: the same DPD model with a hydrophobic polymer added" },
       { n: "3", L: -7.95, t: -7.0, g: "c", say: "3, Comput. Mater. Sci. 2025: all-atom MD, boxes of about 6 x 6 x 23 nm, 100 ns each" },
-      { n: "4", L: -8.35, t: -7.45, g: "s", say: "4, in review: all-atom MD, 7.9 x 7.7 nm silica slabs, 100 ns per system" },
+      { n: "4", L: -8.35, t: -7.45, g: "s", say: "4, in revision: all-atom MD, 7.9 x 7.7 nm silica slabs, 100 ns per system" },
       { n: "5", L: -8.8, t: -9.45, g: "m", say: "5, Appl. Surf. Sci. 2020: all-atom MD, a graphene sheet pulled out of PLA" },
       { n: "6", L: -8.25, t: -9.9, g: "m", say: "6, Eur. Polym. J. 2021: all-atom MD, 3.4 x 5.4 x 3.8 nm, graphene pulled off PLLA" },
       { n: "7", L: -8.55, t: -8.5, g: "m", say: "7, Composites Part A 2020: all-atom MD shape memory cycles in a 4.7 nm box, next to lab tests" },
